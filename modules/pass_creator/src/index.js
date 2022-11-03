@@ -77,7 +77,7 @@ function onInitActivity(payload) {
 
     // if a discountCode back argument was set, show the message in the view.
     if (discountArgument) {
-        selectDiscountCodeOption(discountArgument.discount);
+        selectPassActivity(discountArgument.discount);
     }
 
     // if the discountCode back argument doesn't exist the user can pick
@@ -118,7 +118,7 @@ function onCancelButtonClick() {
     connection.trigger('requestInspectorClose');
 }
 
-function onDiscountCodeSelectChange() {
+function onPassActivityChosen() {
     // enable or disable the done button when the select option changes
     const select = document.getElementById('pass_creator');
 
@@ -132,13 +132,13 @@ function onDiscountCodeSelectChange() {
     connection.trigger('setActivityDirtyState', true);
 }
 
-function selectDiscountCodeOption(value) {
+function selectPassActivity(value) {
     const select = document.getElementById('pass_creator');
     const selectOption = select.querySelector(`[value='${value}']`);
 
     if (selectOption) {
         selectOption.selected = true;
-        onDiscountCodeSelectChange();
+        onPassActivityChosen();
     } else {
         console.log('Could not select value from list', `[value='${value}]'`);
     }
@@ -148,7 +148,7 @@ function setupEventHandlers() {
     // Listen to events on the form
     document.getElementById('done').addEventListener('click', onDoneButtonClick);
     document.getElementById('cancel').addEventListener('click', onCancelButtonClick);
-    document.getElementById('pass_creator').addEventListener('change', onDiscountCodeSelectChange);
+    document.getElementById('pass_creator').addEventListener('change', onPassActivityChosen);
 }
 
 // this function is for example purposes only. it sets ups a Postmonger
@@ -210,3 +210,6 @@ function setupExampleTestHarness() {
         });
     };
 }
+$(document).ready(function(){
+    console.log('jQuery Loaded')
+});
