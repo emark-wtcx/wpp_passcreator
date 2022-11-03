@@ -1,9 +1,9 @@
 {
-  "name": "sfmc-jb-custom-activity-example",
+  "name": "wpp-passcreator",
   "version": "0.0.1",
   "main": "app.js",
-  "author": "Salesforce Marketing Cloud",
-  "description": "Journey Builder Custom Activities",
+  "author": "WPP|WTCX|Dale Mcconnell",
+  "description": "Journey Builder Integration for PassCreator",
   "license": "BSD-3-Clause",
   "scripts": {
     "dev": "concurrently \"npm start\" \"webpack --watch\"",

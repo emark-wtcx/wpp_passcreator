@@ -1,3 +1,4 @@
+const passCreator = require('./modules/pass_creator/webpack.config');
 const discountCodeExample = require('./modules/discount-code/webpack.config');
 const splitExample = require('./modules/discount-redemption-split/webpack.config');
 
