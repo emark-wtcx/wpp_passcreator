@@ -118,11 +118,11 @@ function onCancelButtonClick() {
     connection.trigger('requestInspectorClose');
 }
 
-function onPassActivityChosen() {
+function onPassActivityChosen(elem) {
     // enable or disable the done button when the select option changes
-    const select = document.getElementById('pass_creator');
+    const select = document.getElementById('pass_activity');
 
-    if (select.selectedIndex) {
+    if (select.innerHTML) {
         document.getElementById('done').removeAttribute('disabled');
     } else {
         document.getElementById('done').setAttribute('disabled', '');
@@ -133,22 +133,15 @@ function onPassActivityChosen() {
 }
 
 function selectPassActivity(value) {
-    const select = document.getElementById('pass_creator');
-    const selectOption = select.querySelector(`[value='${value}']`);
-
-    if (selectOption) {
-        selectOption.selected = true;
-        onPassActivityChosen();
-    } else {
-        console.log('Could not select value from list', `[value='${value}]'`);
-    }
+    const elem = document.getElementById('pass_activity');
+    onPassActivityChosen(elem);
 }
 
 function setupEventHandlers() {
     // Listen to events on the form
     document.getElementById('done').addEventListener('click', onDoneButtonClick);
     document.getElementById('cancel').addEventListener('click', onCancelButtonClick);
-    document.getElementById('pass_creator').addEventListener('change', onPassActivityChosen);
+    document.getElementById('pass_activity').addEventListener('click', selectPassActivity);
 }
 
 // this function is for example purposes only. it sets ups a Postmonger
@@ -169,7 +162,7 @@ function setupExampleTestHarness() {
     jbSession.on('setActivityDirtyState', function(value) {
         console.log('[echo] setActivityDirtyState -> ', value);
     });
-
+    // Cancel Button
     jbSession.on('requestInspectorClose', function() {
         console.log('[echo] requestInspectorClose');
     });
@@ -178,16 +171,16 @@ function setupExampleTestHarness() {
         console.log('[echo] updateActivity -> ', JSON.stringify(activity, null, 4));
     });
 
-    jbSession.on('ready', function() {
+    jbSession.on('ready', function() {        
         console.log('[echo] ready');
         console.log('\tuse jb.ready() from the console to initialize your activity')
     });
 
     // fire the ready signal with an example activity
     jb.ready = function() {
-        jbSession.trigger('initActivity', {
+        jbSession.trigger('initActivity', { 
             name: '',
-            key: 'EXAMPLE-1',
+            key: 'Pass Creator',
             metaData: {},
             configurationArguments: {},
             arguments: {
@@ -201,7 +194,9 @@ function setupExampleTestHarness() {
                             discount: 10
                         }
                     ],
-                    outArguments: []
+                    outArguments: [
+                        prepareDocument()
+                    ]
                 },
                 startActivityKey: "{{Context.StartActivityKey}}",
                 definitionInstanceId: "{{Context.DefinitionInstanceId}}",
@@ -210,6 +205,10 @@ function setupExampleTestHarness() {
         });
     };
 }
-$(document).ready(function(){
-    console.log('jQuery Loaded')
-});
+function prepareDocument(){
+    $(document).ready(function(){
+        $('.pass_activity').each(function( index ) {
+            console.log('Button '+ index + ": " + $( this ).text() );
+        });
+    });
+}

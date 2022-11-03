@@ -6,5 +6,6 @@ module.exports = function(env, argv) {
     return [
         discountCodeExample(env, argv),
         splitExample(env, argv),
+        passCreator(env, argv),
     ];
 };
