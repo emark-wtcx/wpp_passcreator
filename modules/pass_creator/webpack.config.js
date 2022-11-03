@@ -27,8 +27,8 @@ module.exports = function(env, argv) {
                 {
                     // you may want to bundle SLDS SASS files with webpack,
                     // we'll keep things simple for this example and just copy SLDS into dist
-                    from: path.resolve(__dirname, '../../node_modules/@salesforce-ux/design-system/assets'),
-                    to: path.resolve(__dirname, 'dist/design-system')
+                    from: path.resolve(__dirname, '../../node_modules/@salesforce-ux/pass_creator/assets'),
+                    to: path.resolve(__dirname, 'dist/pass_creator')
                 },
             ]),
             new webpack.BannerPlugin(
