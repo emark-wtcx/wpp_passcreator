@@ -207,9 +207,10 @@ function setupExampleTestHarness() {
 }
 function prepareDocument(){
     console.log('Preparing document')
-    $(document).ready(function(){
-        $('.pass_activity').each(function( index ) {
-            console.log('Button '+ index + ": " + $( this ).text() );
+    $(document).ready(function(){        
+        $('.pass_activity').each(function( elem ) {
+            var id = $( this ).prop('id')
+            console.log('Button '+ id + ": " + $( this ).text() );
         });
     });
 }
