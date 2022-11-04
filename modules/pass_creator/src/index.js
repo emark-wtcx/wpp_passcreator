@@ -206,6 +206,7 @@ function setupExampleTestHarness() {
     };
 }
 function prepareDocument(){
+    console.log('Preparing document')
     $(document).ready(function(){
         $('.pass_activity').each(function( index ) {
             console.log('Button '+ index + ": " + $( this ).text() );
