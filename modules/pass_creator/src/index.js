@@ -195,7 +195,8 @@ function setupExampleTestHarness() {
                         }
                     ],
                     outArguments: [
-                        prepareDocument()
+                        bindButtons(),
+                        monitorActivity()
                     ]
                 },
                 startActivityKey: "{{Context.StartActivityKey}}",
@@ -205,12 +206,27 @@ function setupExampleTestHarness() {
         });
     };
 }
-function prepareDocument(){
-    console.log('Preparing document')
-    $(document).ready(function(){        
-        $('.pass_activity').each(function( elem ) {
-            var id = $( this ).prop('id')
-            console.log('Button '+ id + ": " + $( this ).text() );
-        });
+function bindButtons(){
+    console.log('Preparing document')     
+    $('.pass_action').on('click',function( elem ) {
+        var id = $( this ).prop('id')
+        $('#pass_activity').val(id);
+        console.log('Button '+ id + ": " + $( this ).text() );
     });
+}
+
+function monitorActivity(){    
+    $('#pass_activity').on('change',function() {        
+        var action = $(this).val();
+        console.log('Action to process: '+action)
+        switch(action){
+            case 'sendpush':
+                jbSession.trigger('showPushMessageConfig')
+            break;
+        }
+    });
+}
+
+function showPushMessageConfig(){    
+    console.log('Show the Push Message Configuration Screen')
 }
