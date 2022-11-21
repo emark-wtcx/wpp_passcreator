@@ -7,7 +7,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "dev": "concurrently \"npm start\" \"webpack --watch\"",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider & webpack --mode production",
+    "build": "webpack --mode production",
     "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider & webpack --mode development",
     "heroku-prebuild": "npm install --dev",
     "start": "node ./app.js",
