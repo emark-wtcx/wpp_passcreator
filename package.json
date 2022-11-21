@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "concurrently \"npm start\" \"webpack --watch\"",
     "build": "webpack --mode production",
-    "build:dev": "webpack --mode development",
+    "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider & webpack --mode development",
     "heroku-prebuild": "npm install --dev",
     "start": "node ./app.js",
     "bump": "npm run bump:patch",
