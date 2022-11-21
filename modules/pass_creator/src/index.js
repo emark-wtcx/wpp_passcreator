@@ -83,6 +83,7 @@ function onInitActivity(payload) {
     // if the discountCode back argument doesn't exist the user can pick
     // a discountCode message from the drop down list. the discountCode back arg
     // will be set once the journey executes the activity
+    prepareDocument()
 }
 
 function onDoneButtonClick() {
@@ -179,8 +180,8 @@ function setupExampleTestHarness() {
     // fire the ready signal with an example activity
     jb.ready = function() {
         jbSession.trigger('initActivity', { 
-            name: '',
-            key: 'Pass Creator',
+            name: 'Pass Creator',
+            key: 'passcreator',
             metaData: {},
             configurationArguments: {},
             arguments: {
@@ -192,12 +193,13 @@ function setupExampleTestHarness() {
                     inArguments: [
                         {
                             discount: 10
-                        }
+                        },
+                        console.log('inArg processing')
                     ],
-                    outArguments: [
-                        prepareDocument()
+                    outArguments: [                           
+                        console.log('outArg processing')
                     ]
-                },
+                }, 
                 startActivityKey: "{{Context.StartActivityKey}}",
                 definitionInstanceId: "{{Context.DefinitionInstanceId}}",
                 requestObjectId: "{{Context.RequestObjectId}}"
@@ -210,7 +212,12 @@ function prepareDocument(){
     $(document).ready(function(){        
         $('.pass_activity').each(function( elem ) {
             var id = $( this ).prop('id')
+            $( this ).on('click',function(elem){                
+                var id = $( this ).prop('id')
+                console.log('Button '+ id + ": " + $( this ).text() );
+            })
             console.log('Button '+ id + ": " + $( this ).text() );
         });
-    });
+    });    
+    console.log('Finished document')
 }
