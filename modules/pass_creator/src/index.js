@@ -174,6 +174,7 @@ function setupExampleTestHarness() {
     jbSession.on('ready', function() {        
         console.log('[echo] ready');
         console.log('\tuse jb.ready() from the console to initialize your activity')
+        setMenu(jbSession);
     });
 
     // fire the ready signal with an example activity
@@ -194,10 +195,7 @@ function setupExampleTestHarness() {
                             discount: 10
                         }
                     ],
-                    outArguments: [
-                        bindButtons(),
-                        monitorActivity()
-                    ]
+                    outArguments: []
                 },
                 startActivityKey: "{{Context.StartActivityKey}}",
                 definitionInstanceId: "{{Context.DefinitionInstanceId}}",
@@ -206,27 +204,28 @@ function setupExampleTestHarness() {
         });
     };
 }
-function bindButtons(){
+function setMenu(journeyBuilder){
     console.log('Preparing document')     
     $('.pass_action').on('click',function( elem ) {
         var id = $( this ).prop('id')
         $('#pass_activity').val(id);
         console.log('Button '+ id + ": " + $( this ).text() );
-    });
-}
-
-function monitorActivity(){    
-    $('#pass_activity').on('change',function() {        
-        var action = $(this).val();
+        var action = $('#pass_activity').val();
         console.log('Action to process: '+action)
         switch(action){
             case 'sendpush':
-                jbSession.trigger('showPushMessageConfig')
+                showPushMessageConfig(action)
             break;
         }
     });
 }
 
-function showPushMessageConfig(){    
-    console.log('Show the Push Message Configuration Screen')
+function monitorActivity(){    
+    $('#pass_activity').on('change',function() {        
+        
+    });
+}
+
+function showPushMessageConfig(action){    
+    console.log('Show the Push Message Configuration Screen '+action)
 }
