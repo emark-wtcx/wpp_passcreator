@@ -11,16 +11,73 @@
 // the cross-document messaging between Journey Builder and the activity
 import Postmonger from 'postmonger';
 
+const app = {   
+    pages:{
+        home:'<h1>Choose Activity</h1>',
+        inputMessage:`
+        <div id="passcreator">
+            <h1>Pass Creator - WPP</h1>
+            <p>Please input your required message:</p>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="textarea-id-01">Textarea Label</label>
+                <div class="slds-form-element__control">
+                    <textarea id="textarea-id-01" placeholder="Placeholder text…" class="slds-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        `,
+        selectMessage:`
+            <div id="passcreator">
+            <h1>Pass Creator - WPP</h1>
+            <p>Select the required message</p>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="select-01">Select Message</label>
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                    <select class="slds-select" id="select-01">
+                        <option value="">Select…</option>
+                        <option>Option One</option>
+                        <option>Option Two</option>
+                        <option>Option Three</option>
+                    </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+        
+    }, 
+    load:function(input){
+        console.log('Loading app')
+        // If JourneyBuilder available
+        if (input){            
+            console.log('App input:')
+            console.table(input)
+            // Inherit properties from JourneyBuilder
+            if (input.hasOwnProperty('version')){
+                app.Version = input.version 
+            }
+        }        
+
+        /**
+         *  Setup 
+         * */
+        setMenu()
+
+
+
+        // Announce ready
+        console.log('App Loading Complete')
+    }
+}
 
 // Create a new connection for this session.
 // We use this connection to talk to Journey Builder. You'll want to keep this
 // reference handy and pass it into your UI framework if you're using React, Angular, Vue, etc.
 const connection = new Postmonger.Session();
 
-
 // we'll store the activity on this variable when we receive it
 let activity = null;
-
 
 // Wait for the document to load before we doing anything
 document.addEventListener('DOMContentLoaded', function main() {
@@ -171,10 +228,11 @@ function setupExampleTestHarness() {
         console.log('[echo] updateActivity -> ', JSON.stringify(activity, null, 4));
     });
 
-    jbSession.on('ready', function() {        
+    jbSession.on('ready', function() {  
+        var jsThis = this;      
         console.log('[echo] ready');
         console.log('\tuse jb.ready() from the console to initialize your activity')
-        setMenu(jbSession);
+        app.load(jsThis);
     });
 
     // fire the ready signal with an example activity
@@ -204,26 +262,56 @@ function setupExampleTestHarness() {
         });
     };
 }
+
+
+
 function setMenu(journeyBuilder){
-    console.log('Preparing document')     
+    console.log('Preparing document')
     $('.pass_action').on('click',function( elem ) {
+        var html='';
         var id = $( this ).prop('id')
         $('#pass_activity').val(id);
         console.log('Button '+ id + ": " + $( this ).text() );
         var action = $('#pass_activity').val();
         console.log('Action to process: '+action)
         switch(action){
-            case 'sendpush':
-                showPushMessageConfig(action)
+            case 'inputMessage':
+                var html = passPage('inputMessage')
+                setProgress(33)
+                $('#home').text('Cancel')
             break;
+            case 'selectMessage':
+                var html = passPage('selectMessage')
+                setProgress(33)
+                $('#home').text('Cancel')
+            break;
+            
+            case 'home':
+                var html = passPage('home')
+                setProgress(0)
+                $('#home').text('Home')
+            break;
+        }
+        if (html.length){
+            $('#main').html(html);
         }
     });
 }
 
-function monitorActivity(){    
-    $('#pass_activity').on('change',function() {        
-        
-    });
+function setProgress(amount){
+    console.log('Setting progress: '+amount)
+    var html = '<div class="slds-progress-bar" id="progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+(100-amount)+'" aria-label="{{Placeholder for description of progress bar}}" role="progressbar">'
+    html += '    <span class="slds-progress-bar__value" id="progress-val" style="width:'+amount+'%">'
+    html += '        <span class="slds-assistive-text" id="progress-text">Progress: '+amount+'%</span>'
+    html += '    </span>'
+    html += '</div>'
+    
+    $( '#progress-holder' ).html(html)
+}
+
+function passPage(page){
+    var html = app.pages[page]
+    return html;
 }
 
 function showPushMessageConfig(action){    
