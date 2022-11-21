@@ -213,6 +213,10 @@ function bindButtons(){
         var id = $( this ).prop('id')
             $( this ).on('click',function(elem){                
                 var id = $( this ).prop('id')
+            $( this ).on('click',function(elem){                
+                var id = $( this ).prop('id')
+                console.log('Button '+ id + ": " + $( this ).text() );
+            })
                 console.log('Button '+ id + ": " + $( this ).text() );
             })
         $('#pass_activity').val(id);
@@ -229,7 +233,8 @@ function monitorActivity(){
                 jbSession.trigger('showPushMessageConfig')
             break;
         }
-    });    
+    });        
+    console.log('Finished document')
     console.log('Finished document')
 }
 
