@@ -12,8 +12,10 @@
 import Postmonger from 'postmonger';
 
 const app = {   
+    message:null,
     pages:{
         home:'<h1>Choose Activity</h1>',
+        error:'<h1>An error occurred</h1>',
         inputMessage:`
         <div id="passcreator">
             <h1>Pass Creator - WPP</h1>
@@ -21,13 +23,16 @@ const app = {
             <div class="slds-form-element">
                 <label class="slds-form-element__label" for="textarea-id-01">Textarea Label</label>
                 <div class="slds-form-element__control">
-                    <textarea id="textarea-id-01" placeholder="Placeholder text…" class="slds-textarea"></textarea>
+                    <textarea id="pass_message" placeholder="Placeholder text…" class="slds-textarea"></textarea>
                 </div>
+            </div><br />
+            <div class="slds-col slds-size_3-of-3">
+                <button id="button1" data-action="previewMessage" class="slds-button slds-button_brand pass_action">Preview Message</button>
             </div>
         </div>
         `,
         selectMessage:`
-            <div id="passcreator">
+        <div id="passcreator">
             <h1>Pass Creator - WPP</h1>
             <p>Select the required message</p>
             <div class="slds-form-element">
@@ -42,9 +47,69 @@ const app = {
                     </select>
                     </div>
                 </div>
+            </div><br />
+            <div class="slds-col slds-size_3-of-3">
+                <button id="button1" data-action="previewMessage" class="slds-button slds-button_brand pass_action">Preview Message</button>
             </div>
         </div>
-        `
+        `,
+        previewMessage:`
+            <div id="passcreator">
+            <h1>Pass Creator - WPP</h1>
+            <p>Here's what your message will look like</p>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="textarea-id-01">Textarea Label</label>
+                <div class="slds-form-element__control">
+                    <textarea id="pass_message" placeholder="Placeholder text…" class="slds-textarea" readonly></textarea>
+                </div>
+            </div>
+        </div>
+        `,
+        modal:`<section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+        <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+        </svg>
+        <span class="slds-assistive-text">Cancel and close</span>
+        </button>
+        <div class="slds-modal__header">
+        <h1 id="modal-header" class="slds-modal__title slds-hyphenate">Modal header</h1>
+        </div>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+        <p id="modal_message"></p>
+        </div>
+        <div class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" aria-label="Cancel and close">Cancel</button>
+        <button class="slds-button slds-button_brand">Save</button>
+        </div>
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        `,
+        ribbon:`<div class="slds-notify_container slds-is-relative">
+        <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+          <span class="slds-assistive-text">success</span>
+          <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+            </svg>
+          </span>
+          <div class="slds-notify__content">
+            <h2 class="slds-text-heading_small " id="modal_message"></h2>
+          </div>
+          <div class="slds-notify__close">
+            <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+              <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+              </svg>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      `,
+
         
     }, 
     load:function(input){
@@ -221,7 +286,11 @@ function setupExampleTestHarness() {
     });
     // Cancel Button
     jbSession.on('requestInspectorClose', function() {
-        console.log('[echo] requestInspectorClose');
+        console.log('[echo] requestInspectorClose');        
+        var html = getPage('selectMessage')
+        setProgress(0)
+        $('#home').text('Home')
+        $('#main').html(html)
     });
 
     jbSession.on('updateActivity', function(activity) {
@@ -265,36 +334,50 @@ function setupExampleTestHarness() {
 
 
 
-function setMenu(journeyBuilder){
+function setMenu(){
     console.log('Preparing document')
     $('.pass_action').on('click',function( elem ) {
         var html='';
         var id = $( this ).prop('id')
-        $('#pass_activity').val(id);
-        console.log('Button '+ id + ": " + $( this ).text() );
-        var action = $('#pass_activity').val();
+        console.log('Button #'+ id + ": " + $( this ).text() );
+        var action = $(this).data('action');
         console.log('Action to process: '+action)
         switch(action){
             case 'inputMessage':
-                var html = passPage('inputMessage')
+                var html = getPage('inputMessage')
                 setProgress(33)
-                $('#home').text('Cancel')
+                $('#home').text('Cancel').data('action','home')
             break;
             case 'selectMessage':
-                var html = passPage('selectMessage')
+                var html = getPage('selectMessage')
                 setProgress(33)
-                $('#home').text('Cancel')
+                $('#home').text('Cancel').data('action','home')
+            break;
+            case 'previewMessage':
+                var previewMessage = $('#pass_message').val()
+                var preview = getPage('ribon')
+                $('#main').append(preview);
+                setProgress(66)
+                $('#home').text('back').data('action','back').prop('href','javascript:history.go(-1)')
             break;
             
             case 'home':
-                var html = passPage('home')
+                var html = getPage('home')
                 setProgress(0)
-                $('#home').text('Home')
+                $('#home').text('Home').data('action','home')
             break;
+            default:
+                var html = getPage('error')
+                break;
         }
         if (html.length){
             $('#main').html(html);
+            if (action == 'previewMessage'){                
+                $('#modal_message').val(previewMessage)
+            }
+            setMenu()
         }
+        
     });
 }
 
@@ -309,7 +392,7 @@ function setProgress(amount){
     $( '#progress-holder' ).html(html)
 }
 
-function passPage(page){
+function getPage(page){
     var html = app.pages[page]
     return html;
 }
