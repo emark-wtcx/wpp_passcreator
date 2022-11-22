@@ -7,7 +7,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "dev": "concurrently \"npm start\" \"webpack --watch\"",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider --omit=dev webpack --mode production",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider webpack --omit=dev --mode production",
     "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider & webpack --mode development",
     "deploy": "npm install --dev",
     "start": "node ./app.js",
