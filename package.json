@@ -7,9 +7,9 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "dev": "concurrently \"npm start\" \"webpack --watch\"",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider --omit=dev webpack --mode production",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider webpack --mode production --omit=dev",
     "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider & webpack --mode development",
-    "heroku-prebuild": "npm install --dev",
+    "deploy": "set NODE_OPTIONS=--openssl-legacy-provider npm install --dev",
     "start": "node ./app.js",
     "bump": "npm run bump:patch",
     "bump:major": "./node_modules/version-bump-prompt/bin/bump.js --major --all --tag",
