@@ -7,9 +7,9 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "dev": "concurrently \"npm start\" \"webpack --watch\"",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider webpack --mode production --omit=dev",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider --omit=dev webpack --mode production",
     "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider & webpack --mode development",
-    "deploy": "set NODE_OPTIONS=--openssl-legacy-provider npm install --dev",
+    "deploy": "set NODE_OPTIONS=--openssl-legacy-provider --omit=dev npm install --dev",
     "start": "node ./app.js",
     "bump": "npm run bump:patch",
     "bump:major": "./node_modules/version-bump-prompt/bin/bump.js --major --all --tag",
@@ -21,9 +21,9 @@
     "@babel/preset-env": "^7.20.2",
     "babel-loader": "^8.3.0",
     "concurrently": "^5.3.0",
-    "copy-webpack-plugin": "^5.1.2",
+    "copy-webpack-plugin": "^11.0.0",
     "version-bump-prompt": "^6.1.0",
-    "webpack": "^4.46.0",
+    "webpack": "^5.75.0",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
