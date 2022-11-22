@@ -9,7 +9,7 @@
     "dev": "concurrently \"npm start\" \"webpack --watch\"",
     "build": "set NODE_OPTIONS=--openssl-legacy-provider --omit=dev webpack --mode production",
     "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider & webpack --mode development",
-    "deploy": "set NODE_OPTIONS=--openssl-legacy-provider --omit=dev npm install --dev",
+    "deploy": "npm install --dev",
     "start": "node ./app.js",
     "bump": "npm run bump:patch",
     "bump:major": "./node_modules/version-bump-prompt/bin/bump.js --major --all --tag",
