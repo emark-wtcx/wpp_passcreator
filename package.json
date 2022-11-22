@@ -2,7 +2,7 @@
   "name": "wpp-passcreator",
   "version": "0.0.1",
   "main": "app.js",
-  "author": "WPP|WTCX|Dale Mcconnell",
+  "author": "WTCX|Dale Mcconnell",
   "description": "Journey Builder Integration for PassCreator",
   "license": "BSD-3-Clause",
   "scripts": {
