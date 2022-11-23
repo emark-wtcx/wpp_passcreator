@@ -12,6 +12,29 @@
 import Postmonger from 'postmonger';
 
 const app = {   
+    subscriber:{
+        'firstname':'Dale',
+        'lastname':'McConnell',
+        'email':'dale.mcconnell'
+    },
+    system:{
+        messages:[
+        'This is message 1: {firstname}',
+        'This is message 2: {lastname}',
+        'This is message 3: {email}'
+        ]
+    },
+    steps:[1,2,3],
+    getSteps:function(){   
+        returnArray = []     
+        if (app.hasOwnProperty('steps') && app.steps.length > 0){
+            for (var i in app.steps){
+                number = app.steps[i]
+                returnArray.push('{ "label": "Step '+number+'", "key": "step'+number+'"}')
+            }
+        }
+        return returnArray
+    },
     message:null,
     pages:{
         home:'<h1>Choose Activity</h1>',
@@ -39,17 +62,14 @@ const app = {
                 <label class="slds-form-element__label" for="select-01">Select Message</label>
                 <div class="slds-form-element__control">
                     <div class="slds-select_container">
-                    <select class="slds-select" id="select-01">
+                    <select class="slds-select" id="messageSelector">
                         <option value="">Select…</option>
-                        <option>Option One</option>
-                        <option>Option Two</option>
-                        <option>Option Three</option>
                     </select>
                     </div>
                 </div>
             </div><br />
             <div class="slds-col slds-size_3-of-3">
-                <button id="button1" data-action="previewMessage" class="slds-button slds-button_brand pass_action">Preview Message</button>
+                <button id="button1" data-action="previewSelectMessage" class="slds-button slds-button_brand pass_action">Preview Message</button>
             </div>
         </div>
         `,
@@ -87,7 +107,7 @@ const app = {
         </section>
         <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
         `,
-        ribbon:`<div class="slds-notify_container slds-is-relative">
+        ribbon:`<div class="slds-notify_container slds-is-relative" id="notification_ribbon">
         <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
           <span class="slds-assistive-text">success</span>
           <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
@@ -127,7 +147,7 @@ const app = {
         /**
          *  Setup 
          * */
-        setMenu()
+        setMenu(input)
 
 
 
@@ -165,6 +185,8 @@ document.addEventListener('DOMContentLoaded', function main() {
 
     // Tell the parent iFrame that we are ready.
     connection.trigger('ready');
+
+    window.app = app
 });
 
 // this function is triggered by Journey Builder via Postmonger.
@@ -326,15 +348,28 @@ function setupExampleTestHarness() {
                 },
                 startActivityKey: "{{Context.StartActivityKey}}",
                 definitionInstanceId: "{{Context.DefinitionInstanceId}}",
-                requestObjectId: "{{Context.RequestObjectId}}"
+                requestObjectId: "{{Context.RequestObjectId}}",
+                wizardSteps: [
+                    getSteps(1)
+                ]
             }
         });
     };
 }
 
+function getSteps(stepNumber){
+    var step = [
+        { "label": "Step 1", "key": "step1"},
+        { "label": "Step 2", "key": "step2" },
+        { "label": "Step 3", "key": "step3" }
+    ]
+    if (stepNumber > 0 && step.length >= stepNumber){
+        step[stepNumber].active=true
+    }
+    return step;
+}
 
-
-function setMenu(){
+function setMenu(connection){
     console.log('Preparing document')
     $('.pass_action').on('click',function( elem ) {
         var html='';
@@ -343,41 +378,200 @@ function setMenu(){
         var action = $(this).data('action');
         console.log('Action to process: '+action)
         switch(action){
+
             case 'inputMessage':
                 var html = getPage('inputMessage')
+                $('#home').html('Cancel').data('action','home')
                 setProgress(33)
-                $('#home').text('Cancel').data('action','home')
-            break;
+                connection.trigger('updateSteps', getSteps(2));
+                break;
+
             case 'selectMessage':
                 var html = getPage('selectMessage')
+
+                $('#home').html('Cancel').data('action','home')
                 setProgress(33)
-                $('#home').text('Cancel').data('action','home')
-            break;
+                connection.trigger('updateSteps', getSteps(2));
+                break;
+
             case 'previewMessage':
-                var previewMessage = $('#pass_message').val()
-                var preview = getPage('ribon')
-                $('#main').append(preview);
-                setProgress(66)
-                $('#home').text('back').data('action','back').prop('href','javascript:history.go(-1)')
-            break;
+                previewMessageButtonAction()
+                break;
+
+            case 'previewSelectMessage':
+                previewSelectMessageButtonAction()
+                break;
             
             case 'home':
                 var html = getPage('home')
-                setProgress(0)
                 $('#home').text('Home').data('action','home')
+                setProgress(0)
+                connection.trigger('updateSteps', getSteps(1));
             break;
+
             default:
                 var html = getPage('error')
                 break;
         }
         if (html.length){
             $('#main').html(html);
-            if (action == 'previewMessage'){                
-                $('#modal_message').val(previewMessage)
-            }
-            setMenu()
+            if (action == 'selectMessage'){
+                buildMessageOptions()
+            }            
         }
         
+        setMenu(connection)
+
+    });
+}
+function previewMessageButtonAction(){
+    var blockDisplay = 'none'
+    if ($('#notification_ribbon').length>0){
+        var blockDisplay = 'shown'
+    }    
+    console.log('blockDisplay: '+blockDisplay)
+    if (blockDisplay == 'none'){  
+        // Show ribbon
+        var ribbon = getPage('ribbon')
+        $('#main').append(ribbon);
+        
+        // Transfer Message
+        transferMessage()
+
+        // Make sure we can close the ribbon after presenting it
+        bindRibbonClose()
+
+        //Update UI on progress
+        setProgress(66)
+        connection.trigger('updateSteps', getSteps(2));
+    }else{
+        transferMessage()
+    }
+}
+
+
+function getMessageOptions(){
+    return app.system.messages
+}
+
+function buildMessageOptions(){
+    var messages = getMessageOptions()
+    console.log('Messages:')
+    console.table(messages)
+
+    if (messages && messages.length>0){
+        for (var i in messages){
+            var message = messages[i]
+            if (message != ''&& message.length>0){
+                var option = '<option value="'+i+'">Option '+i+'</option>'
+                $('#messageSelector').append(option)
+            }
+        }
+    }
+}
+
+function previewSelectMessageButtonAction(){
+    var blockDisplay = 'none'
+    if ($('#notification_ribbon').length>0){
+        var blockDisplay = 'shown'
+    }    
+    console.log('blockDisplay: '+blockDisplay)
+    if (blockDisplay == 'none'){  
+        // Show ribbon
+        var ribbon = getPage('ribbon')
+        $('#main').append(ribbon);
+        
+        // Transfer Message
+        selectMessage()
+
+        // Make sure we can close the ribbon after presenting it
+        bindRibbonClose()
+
+        //Update UI on progress
+        setProgress(66)
+        connection.trigger('updateSteps', getSteps(2));
+    }else{
+        transferMessage()
+    }
+}
+
+// Transfer Message
+function selectMessage(){
+    /**
+     * Check we have the app 
+     */
+    console.log('app:')
+    console.table(app)
+        
+    /**
+     * Get the message choice
+     */
+    var selectedMessage = $('#messageSelector option:selected').val()    
+    console.log('selectedMessage:' + selectedMessage)
+
+    /**
+     * Check we have the data to parse 
+     */
+    if (selectedMessage > 0 && app.hasOwnProperty('system') && app.system.hasOwnProperty('messages')){
+        var previewMessage = app.system.messages[selectedMessage]
+        console.log('Selected Message: '+previewMessage)
+        
+        /**
+         * Loop through the attributes
+         */
+        for (var key in app.subscriber){
+            console.log('Checking key ('+key+')')
+            var value = app.subscriber[key]
+            var keyTag = '{'+key+'}'
+            console.log('Value: '+value)
+            previewMessage = previewMessage.replaceAll(keyTag, value)
+        }
+    }
+    $('#modal_message').html(previewMessage)
+}
+
+// Transfer Message
+function transferMessage(){
+    /**
+     * Check we have the app 
+     */
+    console.log('app:')
+    console.table(app)
+        
+    /**
+     * Get the message
+     */
+    var previewMessage = $('#pass_message').val()
+
+    /**
+     * Check we have the data to parse 
+     */
+    if (app.hasOwnProperty('subscriber')){
+        console.log('Checking data: '+app.subscriber.toString())
+        
+        /**
+         * Loop through the attributes
+         */
+        for (var key in app.subscriber){
+            console.log('Checking key ('+key+')')
+            var value = app.subscriber[key]
+            var keyTag = '{'+key+'}'
+            console.log('Value: '+value)
+            previewMessage = previewMessage.replaceAll(keyTag, value)
+        }
+    }
+    $('#modal_message').html(previewMessage)
+}
+
+function closeRibbon(){    
+    console.log('remove ribbon') 
+    $('.slds-notify_container').remove()
+}
+
+function bindRibbonClose(){
+    console.log('bind modal close')
+    $('.slds-notify__close button').on('click',function(){
+        closeRibbon()
     });
 }
 
