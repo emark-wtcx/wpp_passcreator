@@ -11,7 +11,7 @@ module.exports = function configJSON(req) {
     lang: {
       'en-GB': {
         name: 'Pass Creator',
-        description: 'WPP Intregration for Pass Creator'
+        description: 'WPP Integration for Pass Creator'
       }
     },
     arguments: {
