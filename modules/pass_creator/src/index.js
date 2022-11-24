@@ -15,14 +15,14 @@ const jbApp = {
     subscriber:{
         'firstname':'Dale',
         'lastname':'McConnell',
-        'email':'dale.mcconnell'
+        'email':'dale.mcconnell@emark.com'
     },
     system:{
-        messages:[
-        'This is message 1: {firstname}',
-        'This is message 2: {lastname}',
-        'This is message 3: {email}'
-        ]
+        messages:{
+        'firstname':'This is message 1: {firstname}',
+        'lastname':'This is message 2: {lastname}',
+        'email':'This is message 3: {email}'
+        }
     },
     steps:[1,2,3],
     getSteps:function(){   
@@ -46,14 +46,14 @@ const jbApp = {
             switch(action){
     
                 case 'inputMessage':
-                    var html = jbApp.getPage('inputMessage')
+                    var html = jbApp.getHtml('inputMessage')
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     connection.trigger('updateSteps', jbApp.getSteps(2));
                     break;
     
                 case 'selectMessage':
-                    var html = jbApp.getPage('selectMessage')
+                    var html = jbApp.getHtml('selectMessage')
     
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
@@ -69,14 +69,14 @@ const jbApp = {
                     break;
                 
                 case 'home':
-                    var html = jbApp.getPage('home')
+                    var html = jbApp.getHtml('home')
                     $('#home').text('Home').data('action','home')
                     jbApp.setProgress(0)
                     connection.trigger('updateSteps', jbApp.getSteps(1));
                 break;
     
                 default:
-                    var html = jbApp.getPage('error')
+                    var html = jbApp.getHtml('error')
                     break;
             }
             if (html.length){
@@ -98,7 +98,7 @@ const jbApp = {
         console.log('blockDisplay: '+blockDisplay)
         if (blockDisplay == 'none'){  
             // Show ribbon
-            var ribbon = jbApp.getPage('ribbon')
+            var ribbon = jbApp.getHtml('ribbon')
             $('#main').append(ribbon);
             
             // Transfer Message
@@ -115,6 +115,7 @@ const jbApp = {
         }
     },
     previewSelectMessageButtonAction:function(){
+        console.log('!previewSelectMessageButtonAction!')
         var blockDisplay = 'none'
         if ($('#notification_ribbon').length>0){
             var blockDisplay = 'shown'
@@ -122,7 +123,7 @@ const jbApp = {
         console.log('blockDisplay: '+blockDisplay)
         if (blockDisplay == 'none'){  
             // Show ribbon
-            var ribbon = jbApp.getPage('ribbon')
+            var ribbon = jbApp.getHtml('ribbon')
             $('#main').append(ribbon);
             
             // Transfer Message
@@ -135,6 +136,8 @@ const jbApp = {
             jbApp.setProgress(66)
             connection.trigger('updateSteps', jbApp.getSteps(2));
         }else{
+            // Transfer Message
+            jbApp.selectMessage()
             jbApp.transferMessage()
         }
     },
@@ -153,7 +156,7 @@ const jbApp = {
         /**
          * Check we have the data to parse 
          */
-        if (jbApp.hasOwnProperty('subscriber')){
+        if (jbApp.hasOwnProperty('subscriber') && previewMessage != undefined){
             console.log('Checking data: '+jbApp.subscriber.toString())
             
             /**
@@ -167,6 +170,7 @@ const jbApp = {
                 previewMessage = previewMessage.replaceAll(keyTag, value)
             }
         }
+        console.log('Placing message: '+previewMessage)
         $('#modal_message').html(previewMessage)
     },
     selectMessage:function(){
@@ -185,7 +189,7 @@ const jbApp = {
         /**
          * Check we have the data to parse 
          */
-        if (selectedMessage > 0 && jbApp.hasOwnProperty('system') && jbApp.system.hasOwnProperty('messages')){
+        if (selectedMessage.length > -1 && jbApp.hasOwnProperty('system') && jbApp.system.hasOwnProperty('messages')){
             var previewMessage = jbApp.system.messages[selectedMessage]
             console.log('Selected Message: '+previewMessage)
             
@@ -200,6 +204,7 @@ const jbApp = {
                 previewMessage = previewMessage.replaceAll(keyTag, value)
             }
         }
+        console.log('Placing selected message: '+previewMessage)
         $('#modal_message').html(previewMessage)
     },
     getMessageOptions:function(){
@@ -210,18 +215,25 @@ const jbApp = {
         console.log('Messages:')
         console.table(messages)
     
-        if (messages && messages.length>0){
+        if (messages.toString().length>0){
+            console.log('We have Messages:')
+            var count = 0
             for (var i in messages){
+                console.log('Message#:'+i)
+                count++
                 var message = messages[i]
-                if (message != ''&& message.length>0){
-                    var option = '<option value="'+i+'">Option '+i+'</option>'
+                console.log('Message:'+message)
+                if (message != '' && message.length>0){
+                    var option = '<option value="'+i+'">'+i+'</option>'
                     $('#messageSelector').append(option)
                 }
             }
+        }else{
+            console.log('We have no Messages')
         }
     },
-    getPage:function(page){
-        var html = jbApp.pages[page]
+    getHtml:function(page){
+        var html = jbApp.html[page]
         return html;
     },
     closeRibbon:function(){    
@@ -244,7 +256,7 @@ const jbApp = {
         $( '#progress-holder' ).html(html)
     },
     message:null,
-    pages:{
+    html:{
         home:'<h1>Choose Activity</h1>',
         error:'<h1>An error occurred</h1>',
         inputMessage:`
@@ -400,6 +412,7 @@ document.addEventListener('DOMContentLoaded', function main() {
 // this function is triggered by Journey Builder via Postmonger.
 // Journey Builder will send us a copy of the activity here
 function onInitActivity(payload) {
+    window.jbApp = jbApp
 
     // set the activity object from this payload. We'll refer to this object as we
     // modify it before saving.
@@ -517,7 +530,7 @@ function setupExampleTestHarness() {
     // Cancel Button
     jbSession.on('requestInspectorClose', function() {
         console.log('[echo] requestInspectorClose');        
-        var html = getPage('selectMessage')
+        var html = getHtml('selectMessage')
         setProgress(0)
         $('#home').text('Home')
         $('#main').html(html)
@@ -528,7 +541,7 @@ function setupExampleTestHarness() {
     });
 
     jbSession.on('ready', function() {  
-        var jsThis = this;      
+        var jsThis = jbSession;      
         console.log('[echo] ready');
         console.log('\tuse jb.ready() from the console to initialize your activity')
         jbApp.load(jsThis);
@@ -537,8 +550,8 @@ function setupExampleTestHarness() {
     // fire the ready signal with an example activity
     jb.ready = function() {
         jbSession.trigger('initActivity', { 
-            name: '',
-            key: 'Pass Creator',
+            name: 'Pass Creator',
+            key: 'PassCreator',
             metaData: {},
             configurationArguments: {},
             arguments: {
@@ -558,7 +571,7 @@ function setupExampleTestHarness() {
                 definitionInstanceId: "{{Context.DefinitionInstanceId}}",
                 requestObjectId: "{{Context.RequestObjectId}}",
                 wizardSteps: [
-                    getSteps(1)
+                    jbApp.getSteps(1)
                 ]
             }
         });
