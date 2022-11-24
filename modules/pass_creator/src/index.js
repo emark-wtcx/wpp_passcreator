@@ -77,6 +77,14 @@ const jbApp = {
             }
             
             jbApp.setMenu(connection)
+            console.log('connection:')
+            console.table(connection)
+
+            connection.trigger('requestSchema');
+            connection.on('requestedSchema', function (data) {
+                // save schema
+                console.log('*** Schema ***', JSON.stringify(data['schema']));
+             });
     
         });
     },
