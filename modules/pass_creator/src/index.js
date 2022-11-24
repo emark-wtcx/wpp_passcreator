@@ -363,7 +363,8 @@ const jbApp = {
 
         // Announce ready
         console.log('App Loading Complete')
-        return window.parent.jbApp = jbApp;
+        if (!jbApp.isLocalhost){window.parent.postMessage(jbApp)}
+        else{window.jbApp = jbApp}
     }
 }
 
