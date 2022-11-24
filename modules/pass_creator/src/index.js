@@ -399,9 +399,13 @@ document.addEventListener('DOMContentLoaded', function main() {
 
     var testTokens = connection.trigger('requestTokens');
     console.log('requestedTokens:')
-    console.table(requestedTokens)
+    if (requestedTokens != undefined){ 
+        console.table(requestedTokens)
+    }
     console.log('testTokens:')
-    console.table(testTokens)
+    if (testTokens != undefined){ 
+        console.table(testTokens)
+    }
 });
 
 // this function is triggered by Journey Builder via Postmonger.
