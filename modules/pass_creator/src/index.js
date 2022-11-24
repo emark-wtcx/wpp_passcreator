@@ -76,15 +76,7 @@ const jbApp = {
                 }            
             }
             
-            jbApp.setMenu(connection)
-            console.log('connection:')
-            console.table(connection)
-
-            connection.trigger('requestSchema');
-            connection.on('requestedSchema', function (data) {
-                // save schema
-                console.log('*** Schema ***', JSON.stringify(data['schema']));
-             });
+            jbApp.setMenu(connection)           
     
         });
     },
@@ -155,7 +147,7 @@ const jbApp = {
          * Check we have the data to parse 
          */
         if (jbApp.hasOwnProperty('subscriber') && previewMessage != undefined){
-            console.log('Checking data: '+jbApp.subscriber.toString())
+            console.log('Checking data: '+JSON.stringify(jbApp.subscriber))
             
             /**
              * Loop through the attributes
@@ -405,15 +397,20 @@ document.addEventListener('DOMContentLoaded', function main() {
     // Tell the parent iFrame that we are ready.
     connection.trigger('ready');
 
-    var testTokens = connection.trigger('requestTokens');
-    console.log('requestedTokens:')
-    if (requestedTokens != undefined){ 
-        console.table(requestedTokens)
-    }
-    console.log('testTokens:')
-    if (testTokens != undefined){ 
-        console.table(testTokens)
-    }
+    connection.trigger('requestTokens');
+    connection.on('requestedTokens', function (data) {
+        // save schema
+        console.log('*** Data ***', JSON.stringify(data));
+        console.log('*** Tokens ***', JSON.stringify(data['requestedTokens']));
+     });
+    console.log('connection:')
+    console.table(connection)
+
+    connection.trigger('requestSchema');
+    connection.on('requestedSchema', function (data) {
+        // save schema
+        console.log('*** Schema ***', JSON.stringify(data['schema']));
+     });
 });
 
 // this function is triggered by Journey Builder via Postmonger.
