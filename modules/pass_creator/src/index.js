@@ -353,22 +353,23 @@ const jbApp = {
 
         
     }, 
-    load:function(input){
+    load:function(connection){
         console.log('Loading jbApp')
         // If JourneyBuilder available
-        if (input){            
+        if (connection){            
             console.log('App input:')
-            console.table(input)
+            console.table(connection)
             // Inherit properties from JourneyBuilder
-            if (input.hasOwnProperty('version')){
-                jbApp.Version = input.version 
+            if (connection.hasOwnProperty('version')){
+                jbApp.Version = connection.version 
             }
+            connection.trigger('requestTokens');
         }        
 
         /**
          *  Setup 
          * */
-        jbApp.setMenu(input)
+        jbApp.setMenu(connection)
 
 
 
