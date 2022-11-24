@@ -401,7 +401,8 @@ document.addEventListener('DOMContentLoaded', function main() {
     connection.on('requestedTokens', function (data) {
         // save schema
         console.log('*** Data ***', JSON.stringify(data));
-        console.log('*** Tokens ***', JSON.stringify(data['requestedTokens']));
+        console.log('*** Tokens ***', JSON.stringify(data['token']));
+        jbApp.token = data['token']
      });
     console.log('connection:')
     console.table(connection)
