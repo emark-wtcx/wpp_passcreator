@@ -11,7 +11,7 @@
 // the cross-document messaging between Journey Builder and the activity
 import Postmonger from 'postmonger';
 
-const app = {   
+const jbApp = {   
     subscriber:{
         'firstname':'Dale',
         'lastname':'McConnell',
@@ -27,9 +27,9 @@ const app = {
     steps:[1,2,3],
     getSteps:function(){   
         returnArray = []     
-        if (app.hasOwnProperty('steps') && app.steps.length > 0){
-            for (var i in app.steps){
-                number = app.steps[i]
+        if (jbApp.hasOwnProperty('steps') && jbApp.steps.length > 0){
+            for (var i in jbApp.steps){
+                number = jbApp.steps[i]
                 returnArray.push('{ "label": "Step '+number+'", "key": "step'+number+'"}')
             }
         }
@@ -133,14 +133,14 @@ const app = {
         
     }, 
     load:function(input){
-        console.log('Loading app')
+        console.log('Loading jbApp')
         // If JourneyBuilder available
         if (input){            
             console.log('App input:')
             console.table(input)
             // Inherit properties from JourneyBuilder
             if (input.hasOwnProperty('version')){
-                app.Version = input.version 
+                jbApp.Version = input.version 
             }
         }        
 
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function main() {
     // Tell the parent iFrame that we are ready.
     connection.trigger('ready');
 
-    window.app = app
+    window.jbApp = jbApp
 });
 
 // this function is triggered by Journey Builder via Postmonger.
@@ -323,7 +323,7 @@ function setupExampleTestHarness() {
         var jsThis = this;      
         console.log('[echo] ready');
         console.log('\tuse jb.ready() from the console to initialize your activity')
-        app.load(jsThis);
+        jbApp.load(jsThis);
     });
 
     // fire the ready signal with an example activity
@@ -451,7 +451,7 @@ function previewMessageButtonAction(){
 
 
 function getMessageOptions(){
-    return app.system.messages
+    return jbApp.system.messages
 }
 
 function buildMessageOptions(){
@@ -498,10 +498,10 @@ function previewSelectMessageButtonAction(){
 // Transfer Message
 function selectMessage(){
     /**
-     * Check we have the app 
+     * Check we have the jbApp 
      */
-    console.log('app:')
-    console.table(app)
+    console.log('jbApp:')
+    console.table(jbApp)
         
     /**
      * Get the message choice
@@ -512,16 +512,16 @@ function selectMessage(){
     /**
      * Check we have the data to parse 
      */
-    if (selectedMessage > 0 && app.hasOwnProperty('system') && app.system.hasOwnProperty('messages')){
-        var previewMessage = app.system.messages[selectedMessage]
+    if (selectedMessage > 0 && jbApp.hasOwnProperty('system') && jbApp.system.hasOwnProperty('messages')){
+        var previewMessage = jbApp.system.messages[selectedMessage]
         console.log('Selected Message: '+previewMessage)
         
         /**
          * Loop through the attributes
          */
-        for (var key in app.subscriber){
+        for (var key in jbApp.subscriber){
             console.log('Checking key ('+key+')')
-            var value = app.subscriber[key]
+            var value = jbApp.subscriber[key]
             var keyTag = '{'+key+'}'
             console.log('Value: '+value)
             previewMessage = previewMessage.replaceAll(keyTag, value)
@@ -533,10 +533,10 @@ function selectMessage(){
 // Transfer Message
 function transferMessage(){
     /**
-     * Check we have the app 
+     * Check we have the jbApp 
      */
-    console.log('app:')
-    console.table(app)
+    console.log('jbApp:')
+    console.table(jbApp)
         
     /**
      * Get the message
@@ -546,15 +546,15 @@ function transferMessage(){
     /**
      * Check we have the data to parse 
      */
-    if (app.hasOwnProperty('subscriber')){
-        console.log('Checking data: '+app.subscriber.toString())
+    if (jbApp.hasOwnProperty('subscriber')){
+        console.log('Checking data: '+jbApp.subscriber.toString())
         
         /**
          * Loop through the attributes
          */
-        for (var key in app.subscriber){
+        for (var key in jbApp.subscriber){
             console.log('Checking key ('+key+')')
-            var value = app.subscriber[key]
+            var value = jbApp.subscriber[key]
             var keyTag = '{'+key+'}'
             console.log('Value: '+value)
             previewMessage = previewMessage.replaceAll(keyTag, value)
@@ -587,7 +587,7 @@ function setProgress(amount){
 }
 
 function getPage(page){
-    var html = app.pages[page]
+    var html = jbApp.pages[page]
     return html;
 }
 
