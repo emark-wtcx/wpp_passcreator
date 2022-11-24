@@ -360,7 +360,7 @@ const jbApp = {
          * */
         jbApp.setMenu(connection)
 
-
+        window.jbApp = jbApp;
 
         // Announce ready
         console.log('App Loading Complete')
