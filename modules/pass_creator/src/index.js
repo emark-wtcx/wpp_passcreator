@@ -360,10 +360,10 @@ const jbApp = {
          * */
         jbApp.setMenu(connection)
 
-        window.jbApp = jbApp;
 
         // Announce ready
         console.log('App Loading Complete')
+        return window.parent.jbApp = jbApp;
     }
 }
 
@@ -411,6 +411,7 @@ document.addEventListener('DOMContentLoaded', function main() {
     connection.on('requestedSchema', function (data) {
         // save schema
         console.log('*** Schema ***', JSON.stringify(data['schema']));
+        jbApp.schema = data['schema']
      });
 });
 
