@@ -454,6 +454,7 @@ function onInitActivity(payload) {
     // will be set once the journey executes the activity
     jbApp.load(connection)
     window.jbApp = jbApp
+    return jbApp
 }
 
 function onDoneButtonClick() {
