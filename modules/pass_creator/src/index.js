@@ -50,7 +50,7 @@ const jbApp = {
                     var html = jbApp.getHtml('inputMessage')
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
-                    connection.trigger('updateSteps', jbApp.getSteps(2));
+                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
                     break;
     
                 case 'selectMessage':
@@ -58,7 +58,7 @@ const jbApp = {
     
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
-                    connection.trigger('updateSteps', jbApp.getSteps(2));
+                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
                     break;
     
                 case 'previewMessage':
@@ -73,7 +73,7 @@ const jbApp = {
                     var html = jbApp.getHtml('home')
                     $('#home').text('Home').data('action','home')
                     jbApp.setProgress(0)
-                    connection.trigger('updateSteps', jbApp.getSteps(1));
+                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(1));
                 break;
     
                 default:
@@ -407,7 +407,6 @@ document.addEventListener('DOMContentLoaded', function main() {
     // Tell the parent iFrame that we are ready.
     connection.trigger('ready');
 
-    window.jbApp = jbApp
 });
 
 // this function is triggered by Journey Builder via Postmonger.
@@ -448,7 +447,7 @@ function onInitActivity(payload) {
     // if the discountCode back argument doesn't exist the user can pick
     // a discountCode message from the drop down list. the discountCode back arg
     // will be set once the journey executes the activity
-    jbApp.load(payload)
+    jbApp.load(connection)
     window.jbApp = jbApp
 }
 
