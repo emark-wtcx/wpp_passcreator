@@ -11,7 +11,8 @@
 // the cross-document messaging between Journey Builder and the activity
 import Postmonger from 'postmonger';
 
-const jbApp = {   
+const jbApp = {  
+    isLocalhost:(location.hostname === 'localhost' || location.hostname === '127.0.0.1'),
     subscriber:{
         'firstname':'Dale',
         'lastname':'McConnell',
@@ -412,7 +413,6 @@ document.addEventListener('DOMContentLoaded', function main() {
 // this function is triggered by Journey Builder via Postmonger.
 // Journey Builder will send us a copy of the activity here
 function onInitActivity(payload) {
-    window.jbApp = jbApp
 
     // set the activity object from this payload. We'll refer to this object as we
     // modify it before saving.
@@ -448,6 +448,8 @@ function onInitActivity(payload) {
     // if the discountCode back argument doesn't exist the user can pick
     // a discountCode message from the drop down list. the discountCode back arg
     // will be set once the journey executes the activity
+    jbApp.load(payload)
+    window.jbApp = jbApp
 }
 
 function onDoneButtonClick() {
