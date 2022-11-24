@@ -1,14 +1,3 @@
-// JOURNEY BUILDER CUSTOM ACTIVITY - discountCode ACTIVITY
-// ````````````````````````````````````````````````````````````
-// This example demonstrates a custom activity that utilizes an external service to generate
-// a discount code where the user inputs the discount percent in the configuration.
-//
-// Journey Builder's Postmonger Events Reference can be found here:
-// https://developer.salesforce.com/docs/atlas.en-us.noversion.mc-app-development.meta/mc-app-development/using-postmonger.htm
-
-
-// Custom activities load inside an iframe. We'll use postmonger to manage
-// the cross-document messaging between Journey Builder and the activity
 import Postmonger from 'postmonger';
 
 const jbApp = {  
@@ -73,7 +62,7 @@ const jbApp = {
                     var html = jbApp.getHtml('home')
                     $('#home').text('Home').data('action','home')
                     jbApp.setProgress(0)
-                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(1));
+                    //if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(1));
                 break;
     
                 default:
@@ -110,7 +99,7 @@ const jbApp = {
     
             //Update UI on progress
             jbApp.setProgress(66)
-            connection.trigger('updateSteps', jbApp.getSteps(2));
+            //if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
         }else{
             jbApp.transferMessage()
         }
@@ -135,7 +124,7 @@ const jbApp = {
     
             //Update UI on progress
             jbApp.setProgress(66)
-            connection.trigger('updateSteps', jbApp.getSteps(2));
+            //if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
         }else{
             // Transfer Message
             jbApp.selectMessage()
@@ -408,6 +397,11 @@ document.addEventListener('DOMContentLoaded', function main() {
     // Tell the parent iFrame that we are ready.
     connection.trigger('ready');
 
+    var testTokens = connection.trigger('requestTokens');
+    console.log('requestedTokens:')
+    console.table(requestedTokens)
+    console.log('testTokens:')
+    console.table(testTokens)
 });
 
 // this function is triggered by Journey Builder via Postmonger.
