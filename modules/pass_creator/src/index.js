@@ -199,8 +199,9 @@ const jbApp = {
         /**
          * Check we have the data to parse 
          */
-        if (selectedMessage.length > -1 && jbApp.hasOwnProperty('system') && jbApp.system.hasOwnProperty('messages')){
-            var previewMessage = jbApp.system.messages[selectedMessage]
+         var messages = jbApp.getMessageOptions()
+        if (selectedMessage.length > -1 && messages.toString.length > 0){
+            var previewMessage = messages[selectedMessage]
             console.log('Selected Message: '+previewMessage)
             
             /**
