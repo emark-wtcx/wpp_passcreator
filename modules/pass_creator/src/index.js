@@ -34,6 +34,10 @@ const jbApp = {
         console.log('jbApp.deStructure: ')
         console.table(jbApp.deStructure)
         console.log('jbApp.deStructure.length: '+jbApp.deStructure.toString().length)
+
+        if (!jbApp.isLocalhost && !!Contact){
+            console.table(Contact)
+        }            
     },
     getSteps:function(){   
         var returnArray = []     
@@ -219,7 +223,7 @@ const jbApp = {
         $('#modal_message').html(previewMessage)
     },
     getMessageOptions:function(){
-        if (jbApp.deStructure.toString().length>0){
+        if (!jbApp.isLocalhost){
             return jbApp.deStructure
         }else{
             return jbApp.system.messages
