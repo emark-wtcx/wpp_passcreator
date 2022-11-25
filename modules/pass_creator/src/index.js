@@ -225,7 +225,8 @@ const jbApp = {
         console.log('Placing selected message: '+previewMessage)
         $('#modal_message').html(previewMessage)
         if ($('#modal_message').html() != ''){
-
+            jbApp.connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true });
+            jbApp.connection.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
         }
     },
     getMessageOptions:function(){
