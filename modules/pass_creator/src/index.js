@@ -25,8 +25,8 @@ const jbApp = {
                 jbApp.deStructure={}
                 for (var i in jbApp.schema){
                     var schemaItem = jbApp.schema[i]
-                    var fieldName = schemaItem.Name
-                    var fieldTag = schemaItem.Key
+                    var fieldName = schemaItem.name
+                    var fieldTag = schemaItem.key
                     jbApp.deStructure[fieldName] = fieldTag
                     console.log('['+fieldName+']:'+fieldTag)
                 }
