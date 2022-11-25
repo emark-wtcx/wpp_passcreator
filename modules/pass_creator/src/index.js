@@ -27,7 +27,7 @@ const jbApp = {
                     var schemaItem = jbApp.schema[i]
                     var fieldName = schemaItem.name
                     var fieldTag = schemaItem.key
-                    jbApp.deStructure[fieldName] = '{{'+fieldTag.replace('Event','Interaction')+'}}'
+                    jbApp.deStructure[fieldName] = '{{'+fieldTag+'}}'
                     console.log('['+fieldName+']:'+fieldTag)
                 }
             }
