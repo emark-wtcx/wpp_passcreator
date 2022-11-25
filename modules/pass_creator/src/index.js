@@ -226,7 +226,7 @@ const jbApp = {
         $('#modal_message').html(previewMessage)
         if ($('#modal_message').html() != ''){
             connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true });
-            connection.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
+            jbApp.payload.inArguments.push('{"message": "'+previewMessage+'"}')
             connection.trigger('updateActivity', jbApp.payload);
         }
     },
