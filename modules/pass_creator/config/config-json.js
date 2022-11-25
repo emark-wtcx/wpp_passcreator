@@ -26,12 +26,16 @@ module.exports = function configJSON(req) {
           },
           {
           "phoneNumber": "{{Contact.Default.PhoneNumber}}"
+          },
+          {
+          "message1": "{{Interaction.message1}}"
           }
         ],
         outArguments: [],
         // Fill in the host with the host that this is running on.
         // It must run under HTTPS
-        url: `https://${req.headers.host}/modules/pass_creator/execute`,
+        //url: `https://${req.headers.host}/modules/pass_creator/execute`,
+        url: `https://www.toptal.com/developers/postbin/1669379097531-7817716652061`,
         // The amount of time we want Journey Builder to wait before cancel the request. Default is 60000, Minimal is 1000
         timeout: 10000,
         // how many retrys if the request failed with 5xx error or network error. default is 0

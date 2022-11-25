@@ -52,6 +52,7 @@ const jbApp = {
         return returnArray
     },
     setMenu:function(connection){
+        jbApp.connection = connection
         console.log('Preparing document')
         $('.pass_action').on('click',function( elem ) {
             var html='';
