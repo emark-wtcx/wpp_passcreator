@@ -35,8 +35,8 @@ const jbApp = {
         console.table(jbApp.deStructure)
         console.log('jbApp.deStructure.length: '+jbApp.deStructure.toString().length)
 
-        if (!jbApp.isLocalhost && typeof jbApp.connection !== 'undefined'){
-            console.table(jbApp.connection)
+        if (!jbApp.isLocalhost && typeof connection !== 'undefined'){
+            console.table(connection)
         }else{
             console.table('Localhost or Connection not availble')
         }         
@@ -52,7 +52,6 @@ const jbApp = {
         return returnArray
     },
     setMenu:function(connection){
-        jbApp.connection = connection
         console.log('Preparing document')
         $('.pass_action').on('click',function( elem ) {
             var html='';
@@ -517,7 +516,6 @@ document.addEventListener('DOMContentLoaded', function main() {
         jbApp.parseSchema()
      });
     
-    jbApp.connection=connection
 });
 
 // this function is triggered by Journey Builder via Postmonger.
