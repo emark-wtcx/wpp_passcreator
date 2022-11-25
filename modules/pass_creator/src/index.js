@@ -14,7 +14,30 @@ const jbApp = {
         'email':'This is message 3: {email}'
         }
     },
-    steps:[1,2,3],
+    steps:[1,2,3],  
+    parseSchema:function(){
+        console.log('parseSchema')
+        if (
+            jbApp.hasOwnProperty('schema')
+            && jbApp.schema.length>0
+            ){
+                console.log('schema: '+JSON.stringify(jbApp.schema))
+                jbApp.deStructure={}
+                for (var i in jbApp.schema){
+                    var schemaItem = jbApp.schema[i]
+                    var fieldName = schemaItem.Name
+                    var fieldTag = schemaItem.Key
+                    jbApp.deStructure[fieldName] = fieldTag
+                    console.log('['+fieldName+']:'+fieldTag)
+                }
+            }
+        if (
+            jbApp.hasOwnProperty('deStructure')
+            && jbApp.deStructure.length>0
+            ){
+                console.log('jbApp.deStructure: '+JSON.stringify(jbApp.deStructure))
+            }
+    },
     getSteps:function(){   
         var returnArray = []     
         if (jbApp.hasOwnProperty('steps') && jbApp.steps.length > 0){
@@ -274,6 +297,7 @@ const jbApp = {
                     <div class="slds-select_container">
                     <select class="slds-select" id="messageSelector">
                         <option value="">Select…</option>
+                        {{Event.`+jbApp.eventKey+`.message1}}
                     </select>
                     </div>
                 </div>
@@ -342,6 +366,64 @@ const jbApp = {
 
         
     }, 
+    soap:{
+        getDataExtension:`
+        <?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:u="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+    <s:Header>
+        <a:Action s:mustUnderstand="1">Retrieve</a:Action>
+        <a:To s:mustUnderstand="1">https://{{et_subdomain}}.soap.marketingcloudapis.com/Service.asmx</a:To>
+        <fueloauth xmlns="http://exacttarget.com">{{dne_etAccessToken}}</fueloauth>
+    </s:Header>
+    <s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <RetrieveRequestMsg xmlns="http://exacttarget.com/wsdl/partnerAPI">
+            <RetrieveRequest>
+                <ObjectType>DataExtension</ObjectType>
+                <Properties>ObjectID</Properties>
+                <Properties>CustomerKey</Properties>
+                <Properties>Name</Properties>
+                <Properties>IsSendable</Properties>
+                <Properties>SendableSubscriberField.Name</Properties>
+                <Filter xsi:type="SimpleFilterPart">
+                    <Property>CustomerKey</Property>
+                    <SimpleOperator>equals</SimpleOperator>
+                    <Value>postman_demographics</Value>
+                </Filter>
+            </RetrieveRequest>
+        </RetrieveRequestMsg>
+    </s:Body>
+</s:Envelope>
+        `
+    },
+    getDataExtension:function(){
+        console.log('getDataExtension')
+        $.ajax({
+            type: "POST",
+            url: jbApp.webserUrl,
+            contentType: "text/xml",
+            dataType: "xml",
+            data: jbApp.soap.getDataExtension,
+            success: jbApp.soapSuccess(),
+            error: jbApp.soapError(),
+            done:parseSoapResponse( response, request, settings )
+        });
+    },
+
+    parseSoapResponse:function( response, request, settings ){
+        console.table(response)
+    },
+
+    soapSuccess:function (data, status, req) {
+        console.log('SuccessOccur')
+        if (status == "success")
+            alert(req.responseText);
+    },
+
+    soapError:function(data, status, req) {
+        console.log('ErrorOccur')
+        alert(req.responseText + " " + status);
+    },
+    
     load:function(connection){
         console.log('Loading jbApp')
         // If JourneyBuilder available
@@ -363,8 +445,11 @@ const jbApp = {
 
         // Announce ready
         console.log('App Loading Complete')
+        /*
         if (!jbApp.isLocalhost){window.parent.postMessage(jbApp)}
         else{window.jbApp = jbApp}
+        */
+       window.jbApp = jbApp
     }
 }
 
@@ -413,6 +498,7 @@ document.addEventListener('DOMContentLoaded', function main() {
         // save schema
         console.log('*** Schema ***', JSON.stringify(data['schema']));
         jbApp.schema = data['schema']
+        jbApp.parseSchema()
      });
 });
 
