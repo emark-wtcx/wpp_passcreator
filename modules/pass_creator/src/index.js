@@ -35,10 +35,10 @@ const jbApp = {
         console.table(jbApp.deStructure)
         console.log('jbApp.deStructure.length: '+jbApp.deStructure.toString().length)
 
-        if (!jbApp.isLocalhost && !!typeof Contact !== 'undefined'){
-            console.table(Contact)
+        if (!jbApp.isLocalhost && typeof jbApp.connection !== 'undefined'){
+            console.table(jbApp.connection)
         }else{
-            console.table('Localhost or No Contact Object availble')
+            console.table('Localhost or Connection not availble')
         }         
     },
     getSteps:function(){   
@@ -224,6 +224,9 @@ const jbApp = {
         }
         console.log('Placing selected message: '+previewMessage)
         $('#modal_message').html(previewMessage)
+        if ($('#modal_message').html() != ''){
+
+        }
     },
     getMessageOptions:function(){
         if (!jbApp.isLocalhost){
@@ -508,6 +511,8 @@ document.addEventListener('DOMContentLoaded', function main() {
         jbApp.schema = data['schema']
         jbApp.parseSchema()
      });
+    
+    jbApp.connection=connection
 });
 
 // this function is triggered by Journey Builder via Postmonger.
