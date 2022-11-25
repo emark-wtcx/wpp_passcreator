@@ -27,13 +27,13 @@ const jbApp = {
                     var schemaItem = jbApp.schema[i]
                     var fieldName = schemaItem.name
                     var fieldTag = schemaItem.key
-                    jbApp.deStructure[fieldName] = '{'+fieldTag+'}'
+                    jbApp.deStructure[fieldName] = '{'+fieldTag.replace('Event','Interaction')+'}'
                     console.log('['+fieldName+']:'+fieldTag)
                 }
             }
         console.log('jbApp.deStructure: ')
         console.table(jbApp.deStructure)
-        console.log('jbApp.deStructure.length: '+jbApp.deStructure.length)
+        console.log('jbApp.deStructure.length: '+jbApp.deStructure.toString().length)
     },
     getSteps:function(){   
         var returnArray = []     
@@ -218,7 +218,7 @@ const jbApp = {
         $('#modal_message').html(previewMessage)
     },
     getMessageOptions:function(){
-        if (jbApp.deStructure.length>0){
+        if (jbApp.deStructure.toString().length>0){
             return jbApp.deStructure
         }else{
             return jbApp.system.messages
