@@ -227,6 +227,7 @@ const jbApp = {
         if ($('#modal_message').html() != ''){
             jbApp.connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true });
             jbApp.connection.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
+            connection.trigger('updateActivity', jbApp.payload);
         }
     },
     getMessageOptions:function(){
@@ -555,6 +556,7 @@ function onInitActivity(payload) {
     // a discountCode message from the drop down list. the discountCode back arg
     // will be set once the journey executes the activity
     jbApp.load(connection)
+    jbApp.payload = payload
     window.jbApp = jbApp
     return jbApp
 }
