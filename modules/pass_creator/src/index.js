@@ -228,6 +228,8 @@ const jbApp = {
             connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true });
             jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
             connection.trigger('updateActivity', jbApp.payload);
+            console.log('Payload: ')
+            console.table(jbApp.payload)
         }
     },
     getMessageOptions:function(){
