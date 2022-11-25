@@ -221,7 +221,14 @@ const jbApp = {
         $('#modal_message').html(previewMessage)
     },
     getMessageOptions:function(){
-        return jbApp.system.messages
+        if (
+            jbApp.hasOwnProperty('deStructure')
+            && jbApp.deStructure.length>0
+        ){
+            return jbApp.deStructure
+        }else{
+            return jbApp.system.messages
+        }
     },
     buildMessageOptions:function(){
         var messages = jbApp.getMessageOptions()
@@ -297,7 +304,6 @@ const jbApp = {
                     <div class="slds-select_container">
                     <select class="slds-select" id="messageSelector">
                         <option value="">Select…</option>
-                        {{Event.`+jbApp.eventKey+`.message1}}
                     </select>
                     </div>
                 </div>
