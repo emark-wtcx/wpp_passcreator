@@ -227,9 +227,10 @@ const jbApp = {
         if ($('#modal_message').html() != ''){
             connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true });
             jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
-            connection.trigger('updateActivity', jbApp.payload);
+            jbApp.payload["metaData"].isConfigured = true;
             console.log('Payload: ')
             console.table(jbApp.payload)
+            connection.trigger('updateActivity', jbApp.payload);
         }
     },
     getMessageOptions:function(){
