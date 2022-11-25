@@ -37,7 +37,9 @@ const jbApp = {
 
         if (!jbApp.isLocalhost && !!Contact){
             console.table(Contact)
-        }            
+        }else{
+            console.table('Localhost or No Contact Object availble')
+        }         
     },
     getSteps:function(){   
         var returnArray = []     
