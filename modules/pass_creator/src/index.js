@@ -35,7 +35,7 @@ const jbApp = {
         console.table(jbApp.deStructure)
         console.log('jbApp.deStructure.length: '+jbApp.deStructure.toString().length)
 
-        if (!jbApp.isLocalhost && !!Contact){
+        if (!jbApp.isLocalhost && !!typeof Contact !== 'undefined'){
             console.table(Contact)
         }else{
             console.table('Localhost or No Contact Object availble')
