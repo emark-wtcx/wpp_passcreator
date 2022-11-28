@@ -82,8 +82,9 @@ const jbApp = {
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
-                        //connection.trigger('updateSteps', jbApp.getSteps(2));
+                        if (currentStep.key === 'select') {
                         connection.trigger('nextStep')
+                        }
                         console.log('Step: 2')
                     }
                     break;
@@ -94,17 +95,19 @@ const jbApp = {
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
-                        //connection.trigger('updateSteps', jbApp.getSteps(2));
+                        if (currentStep.key === 'select') {
                         connection.trigger('nextStep')
+                        }
                         console.log('Step: 2')
                     }
                     break;
     
                 case 'previewMessage':
                     jbApp.previewMessageButtonAction()
-                    if (jbApp.isLocalhost == false) {
-                        //connection.trigger('updateSteps', jbApp.getSteps(3));
-                        connection.trigger('nextStep')
+                    if (jbApp.isLocalhost == false) {                        
+                        if (currentStep.key === 'configure') {
+                            connection.trigger('nextStep')
+                            }
                         console.log('Step: 3')
                     }
                     break;
@@ -112,8 +115,9 @@ const jbApp = {
                 case 'previewSelectMessage':
                     jbApp.previewSelectMessageButtonAction()
                     if (jbApp.isLocalhost == false) {
-                        //connection.trigger('updateSteps', jbApp.getSteps(3));
-                        connection.trigger('nextStep')
+                        if (currentStep.key === 'configure') {
+                            connection.trigger('nextStep')
+                            }
                         console.log('Step: 3')
                     }
                     break;
