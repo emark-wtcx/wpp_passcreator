@@ -82,7 +82,8 @@ const jbApp = {
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
-                        connection.trigger('updateSteps', jbApp.getSteps(2));
+                        //connection.trigger('updateSteps', jbApp.getSteps(2));
+                        connection.trigger('nextStep')
                         console.log('Step: 2')
                     }
                     break;
@@ -93,9 +94,8 @@ const jbApp = {
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
-                        connection.trigger('updateSteps', jbApp.getSteps(2));
+                        //connection.trigger('updateSteps', jbApp.getSteps(2));
                         connection.trigger('nextStep')
-                        connection.trigger('updateSteps', 'configure');
                         console.log('Step: 2')
                     }
                     break;
@@ -103,7 +103,8 @@ const jbApp = {
                 case 'previewMessage':
                     jbApp.previewMessageButtonAction()
                     if (jbApp.isLocalhost == false) {
-                        connection.trigger('updateSteps', jbApp.getSteps(3));
+                        //connection.trigger('updateSteps', jbApp.getSteps(3));
+                        connection.trigger('nextStep')
                         console.log('Step: 3')
                     }
                     break;
@@ -111,18 +112,19 @@ const jbApp = {
                 case 'previewSelectMessage':
                     jbApp.previewSelectMessageButtonAction()
                     if (jbApp.isLocalhost == false) {
-                        connection.trigger('updateSteps', jbApp.getSteps(3));
+                        //connection.trigger('updateSteps', jbApp.getSteps(3));
+                        connection.trigger('nextStep')
                         console.log('Step: 3')
                     }
                     break;
                 
                 case 'home':
                     var html = jbApp.getHtml('home')
-                    $('#home').text('Home').data('action','home')                    
-                    connection.trigger('prevStep')
+                    $('#home').text('Home').data('action','home')        
                     jbApp.setProgress(0)
                     if (jbApp.isLocalhost == false) {
-                        connection.trigger('updateSteps', jbApp.getSteps(1));
+                        //connection.trigger('updateSteps', jbApp.getSteps(1));            
+                        connection.trigger('prevStep')
                         console.log('Step: 1')
                     }
                 break;
@@ -551,6 +553,8 @@ document.addEventListener('DOMContentLoaded', function main() {
         jbApp.schema = data['schema']
         jbApp.parseSchema()
      });
+
+     
     
 });
 

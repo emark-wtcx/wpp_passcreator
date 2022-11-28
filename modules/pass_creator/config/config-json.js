@@ -11,7 +11,10 @@ module.exports = function configJSON(req) {
     lang: {
       'en-GB': {
         name: 'Pass Creator',
-        description: 'WPP Integration for Pass Creator'
+        description: 'WPP Integration for Pass Creator',
+        selectType:'Select Input Type',
+        configureMessage:'Configure Your Message',
+        confirm:'Confirm',
       }
     },
     arguments: {
@@ -22,7 +25,7 @@ module.exports = function configJSON(req) {
             "contactIdentifier": "{{Contact.Key}}"
           },
           {
-          "emailAddress": "{{InteractionDefaults.emailaddress}}"
+          "emailAddress": "{{Event.emailaddress}}"
           }
         ],
         outArguments: [],
@@ -54,15 +57,15 @@ module.exports = function configJSON(req) {
     wizardSteps: [
       {
         "label": "Select Type",
-        "key": 0
+        "key": "selectType"
       },
       {
         "label": "Configure Message",
-        "key": 1
+        "key": "configureMessage"
       },
       {
         "label": "Confirm",
-        "key": 2
+        "key": "confim"
       },
     ],    
     userInterfaces: {
