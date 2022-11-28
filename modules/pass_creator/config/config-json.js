@@ -26,14 +26,14 @@ module.exports = function configJSON(req) {
             "contactIdentifier": "{{Contact.Key}}"
           },
           {
-          "emailAddress": "{{Event.emailaddress}}"
+            "emailAddress": "{{Event.emailaddress}}"
           }
         ],
         outArguments: [],
         // Fill in the host with the host that this is running on.
         // It must run under HTTPS
         url: `https://eol3vy07fc9qzyh.m.pipedream.net`,
-        verb: 'POST',
+        verb: "POST",
         format: "json",
         useJwt: false,
         // The amount of time we want Journey Builder to wait before cancel the request. Default is 60000, Minimal is 1000

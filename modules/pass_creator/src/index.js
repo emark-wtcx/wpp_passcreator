@@ -2,12 +2,12 @@ import Postmonger from 'postmonger';
 
 const jbApp = {  
     isLocalhost:(location.hostname === 'localhost' || location.hostname === '127.0.0.1'),
-    subscriber:{
-        'firstname':'{{Contact.Default.FirstName}}',
-        'lastname':'{{Contact.Default.LastName}}',
-        'email':'{{Contact.Default.Email}}'
-    },
     system:{
+        subscriber:{
+            'firstname':'{{Contact.Default.FirstName}}',
+            'lastname':'{{Contact.Default.LastName}}',
+            'email':'{{Contact.Default.Email}}'
+        },
         messages:{
         'firstname':'This is message 1: {firstname}',
         'lastname':'This is message 2: {lastname}',
@@ -64,6 +64,7 @@ const jbApp = {
                 selectedStep = elem.data('step-index')
             }
         })
+        return selectedStep++
     },
     getSteps:function(activeStep){   
         var returnArray = []     
@@ -224,14 +225,14 @@ const jbApp = {
          * Check we have the data to parse 
          */
         if (jbApp.hasOwnProperty('subscriber') && previewMessage != undefined){
-            console.log('Checking data: '+JSON.stringify(jbApp.subscriber))
+            console.log('Checking data: '+JSON.stringify(jbApp.system.subscriber))
             
             /**
              * Loop through the attributes
              */
-            for (var key in jbApp.subscriber){
+            for (var key in jbApp.system.subscriber){
                 console.log('Checking key ('+key+')')
-                var value = jbApp.subscriber[key]
+                var value = jbApp.system.subscriber[key]
                 var keyTag = '{'+key+'}'
                 console.log('Value: '+value)
                 previewMessage = previewMessage.replaceAll(keyTag, value)
@@ -264,9 +265,9 @@ const jbApp = {
             /**
              * Loop through the attributes
              */
-            for (var key in jbApp.subscriber){
+            for (var key in jbApp.system.subscriber){
                 console.log('Checking key ('+key+')')
-                var value = jbApp.subscriber[key]
+                var value = jbApp.system.subscriber[key]
                 var keyTag = '{'+key+'}'
                 console.log('Value: '+value)
                 previewMessage = previewMessage.replaceAll(keyTag, value)
