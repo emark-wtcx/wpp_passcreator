@@ -28,6 +28,7 @@ const jbApp = {
           "key": 'confirm'
         },
       ],  
+    
     deStructure:{},
     parseSchema:function(){
         console.log('parseSchema')
@@ -53,6 +54,16 @@ const jbApp = {
         }else{
             console.table('Localhost or Connection not availble')
         }         
+    },
+    getCurrentStep:function(){
+        var stepSelector = '.steps-container li'
+        var selectedStep = 0
+        $(stepSelector).each(function(){
+            let elem = $(this)
+            if (elem.hasClass('active')){
+                selectedStep = elem.data('step-index')
+            }
+        })
     },
     getSteps:function(activeStep){   
         var returnArray = []     
@@ -82,7 +93,7 @@ const jbApp = {
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
-                        if(connection.currentStep.key === 'select') {
+                        if(jbApp.getCurrentStep() === 'select') {
                         connection.trigger('nextStep')
                         }
                         console.log('Step: 2')
@@ -95,7 +106,7 @@ const jbApp = {
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
-                        if(connection.currentStep.key === 'select') {
+                        if(jbApp.getCurrentStep() === 'select') {
                         connection.trigger('nextStep')
                         }
                         console.log('Step: 2')
@@ -105,7 +116,7 @@ const jbApp = {
                 case 'previewMessage':
                     jbApp.previewMessageButtonAction()
                     if (jbApp.isLocalhost == false) {                        
-                        if(connection.currentStep.key === 'configure') {
+                        if(jbApp.getCurrentStep() === 'configure') {
                             connection.trigger('nextStep')
                             }
                         console.log('Step: 3')
@@ -115,7 +126,7 @@ const jbApp = {
                 case 'previewSelectMessage':
                     jbApp.previewSelectMessageButtonAction()
                     if (jbApp.isLocalhost == false) {
-                        if(connection.currentStep.key === 'configure') {
+                        if(jbApp.getCurrentStep() === 'configure') {
                             connection.trigger('nextStep')
                             }
                         console.log('Step: 3')
