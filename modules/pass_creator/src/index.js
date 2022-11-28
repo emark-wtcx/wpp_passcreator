@@ -81,7 +81,10 @@ const jbApp = {
                     var html = jbApp.getHtml('inputMessage')
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
-                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
+                    if (jbApp.isLocalhost == false) {
+                        connection.trigger('updateSteps', jbApp.getSteps(2));
+                        console.log('Step: 2')
+                    }
                     break;
     
                 case 'selectMessage':
@@ -89,24 +92,37 @@ const jbApp = {
     
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
-                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
+                    if (jbApp.isLocalhost == false) {
+                        connection.trigger('updateSteps', jbApp.getSteps(2));
+                        connection.trigger('updateSteps', 'configure');
+                        console.log('Step: 2')
+                    }
                     break;
     
                 case 'previewMessage':
                     jbApp.previewMessageButtonAction()
-                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(3));
+                    if (jbApp.isLocalhost == false) {
+                        connection.trigger('updateSteps', jbApp.getSteps(3));
+                        console.log('Step: 3')
+                    }
                     break;
     
                 case 'previewSelectMessage':
                     jbApp.previewSelectMessageButtonAction()
-                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(3));
+                    if (jbApp.isLocalhost == false) {
+                        connection.trigger('updateSteps', jbApp.getSteps(3));
+                        console.log('Step: 3')
+                    }
                     break;
                 
                 case 'home':
                     var html = jbApp.getHtml('home')
                     $('#home').text('Home').data('action','home')
                     jbApp.setProgress(0)
-                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(1));
+                    if (jbApp.isLocalhost == false) {
+                        connection.trigger('updateSteps', jbApp.getSteps(1));
+                        console.log('Step: 1')
+                    }
                 break;
     
                 default:
