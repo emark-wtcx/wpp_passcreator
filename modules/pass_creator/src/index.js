@@ -94,6 +94,7 @@ const jbApp = {
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
                         connection.trigger('updateSteps', jbApp.getSteps(2));
+                        connection.trigger('nextStep')
                         connection.trigger('updateSteps', 'configure');
                         console.log('Step: 2')
                     }
@@ -117,7 +118,8 @@ const jbApp = {
                 
                 case 'home':
                     var html = jbApp.getHtml('home')
-                    $('#home').text('Home').data('action','home')
+                    $('#home').text('Home').data('action','home')                    
+                    connection.trigger('prevStep')
                     jbApp.setProgress(0)
                     if (jbApp.isLocalhost == false) {
                         connection.trigger('updateSteps', jbApp.getSteps(1));
