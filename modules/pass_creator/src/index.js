@@ -555,6 +555,12 @@ document.addEventListener('DOMContentLoaded', function main() {
      });
 
      
+    connection.trigger('requestInteraction');
+    connection.on('requestedInteraction', function (data) {
+        console.log('Requested Interaction:')
+        console.table(data)
+    });
+
     
 });
 
