@@ -9,9 +9,9 @@ const jbApp = {
             'email':'{{Contact.Default.Email}}'
         },
         messages:{
-        'firstname':'This is message 1: {firstname}',
-        'lastname':'This is message 2: {lastname}',
-        'email':'This is message 3: {email}'
+            'firstname':'This is message 1: {firstname}',
+            'lastname':'This is message 2: {lastname}',
+            'email':'This is message 3: {email}'
         }
     },
     steps:[
@@ -28,7 +28,7 @@ const jbApp = {
           "key": 'confirm'
         },
       ],  
-    
+    pageHtml:'',
     deStructure:{},
     parseSchema:function(){
         console.log('parseSchema')
@@ -89,29 +89,12 @@ const jbApp = {
             console.log('Action to process: '+action)
             switch(action){
     
-                case 'inputMessage':
-                    var html = jbApp.getHtml('inputMessage')
-                    $('#home').html('Cancel').data('action','home')
-                    jbApp.setProgress(33)
-                    if (jbApp.isLocalhost == false) {
-                        if(jbApp.getCurrentStep() === 'select') {
-                        connection.trigger('nextStep')
-                        }
-                        console.log('Step: 2')
-                    }
+                case 'inputMessage':     
+                    jbApp.inputMessageButtonAction()
                     break;
     
                 case 'selectMessage':
-                    var html = jbApp.getHtml('selectMessage')
-    
-                    $('#home').html('Cancel').data('action','home')
-                    jbApp.setProgress(33)
-                    if (jbApp.isLocalhost == false) {
-                        if(jbApp.getCurrentStep() === 'select') {
-                        connection.trigger('nextStep')
-                        }
-                        console.log('Step: 2')
-                    }
+                    jbApp.selectMessageButtonAction()
                     break;
     
                 case 'previewMessage':
@@ -135,22 +118,15 @@ const jbApp = {
                     break;
                 
                 case 'home':
-                    var html = jbApp.getHtml('home')
-                    $('#home').text('Home').data('action','home')        
-                    jbApp.setProgress(0)
-                    if (jbApp.isLocalhost == false) {
-                        //connection.trigger('updateSteps', jbApp.getSteps(1));            
-                        connection.trigger('prevStep')
-                        console.log('Step: 1')
-                    }
+                    jbApp.homeButtonAction()
                 break;
     
                 default:
                     var html = jbApp.getHtml('error')
                     break;
             }
-            if (html.length){
-                $('#main').html(html);
+            if (jbApp.pageHtml.length){
+                $('#main').html(jbApp.pageHtml);
                 if (action == 'selectMessage'){
                     jbApp.buildMessageOptions()
                 }            
@@ -159,6 +135,39 @@ const jbApp = {
             jbApp.setMenu(connection)           
     
         });
+    },
+    homeButtonAction:function(){
+        jbApp.pageHtml = jbApp.getHtml('home')
+        $('#home').text('Home').data('action','home')        
+        jbApp.setProgress(0)
+        if (jbApp.isLocalhost == false) {
+            //connection.trigger('updateSteps', jbApp.getSteps(1));            
+            connection.trigger('prevStep')
+            console.log('Step: 1')
+        }
+    },
+    inputMessageButtonAction:function(){   
+        jbApp.html = jbApp.getHtml('inputMessage')
+        $('#home').html('Cancel').data('action','home')
+        jbApp.setProgress(33)
+        if (jbApp.isLocalhost == false) {
+            if(jbApp.getCurrentStep() === 'select') {
+            connection.trigger('nextStep')
+            }
+            console.log('Step: 2')
+        }
+    },
+    selectMessageButtonAction:function(){        
+        jbApp.html = jbApp.getHtml('selectMessage')
+    
+        $('#home').html('Cancel').data('action','home')
+        jbApp.setProgress(33)
+        if (jbApp.isLocalhost == false) {
+            if(jbApp.getCurrentStep() === 'select') {
+            connection.trigger('nextStep')
+            }
+            console.log('Step: 2')
+        }
     },
     previewMessageButtonAction:function(){
         var blockDisplay = 'none'
