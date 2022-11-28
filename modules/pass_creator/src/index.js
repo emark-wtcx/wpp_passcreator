@@ -82,7 +82,7 @@ const jbApp = {
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
-                        if (currentStep.key === 'select') {
+                        if(connection.currentStep.key === 'select') {
                         connection.trigger('nextStep')
                         }
                         console.log('Step: 2')
@@ -95,7 +95,7 @@ const jbApp = {
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
                     if (jbApp.isLocalhost == false) {
-                        if (currentStep.key === 'select') {
+                        if(connection.currentStep.key === 'select') {
                         connection.trigger('nextStep')
                         }
                         console.log('Step: 2')
@@ -105,7 +105,7 @@ const jbApp = {
                 case 'previewMessage':
                     jbApp.previewMessageButtonAction()
                     if (jbApp.isLocalhost == false) {                        
-                        if (currentStep.key === 'configure') {
+                        if(connection.currentStep.key === 'configure') {
                             connection.trigger('nextStep')
                             }
                         console.log('Step: 3')
@@ -115,7 +115,7 @@ const jbApp = {
                 case 'previewSelectMessage':
                     jbApp.previewSelectMessageButtonAction()
                     if (jbApp.isLocalhost == false) {
-                        if (currentStep.key === 'configure') {
+                        if(connection.currentStep.key === 'configure') {
                             connection.trigger('nextStep')
                             }
                         console.log('Step: 3')
