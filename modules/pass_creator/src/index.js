@@ -3,9 +3,9 @@ import Postmonger from 'postmonger';
 const jbApp = {  
     isLocalhost:(location.hostname === 'localhost' || location.hostname === '127.0.0.1'),
     subscriber:{
-        'firstname':'Dale',
-        'lastname':'McConnell',
-        'email':'dale.mcconnell@emark.com'
+        'firstname':'{{Contact.Default.FirstName}}',
+        'lastname':'{{Contact.Default.LastName}}',
+        'email':'{{Contact.Default.Email}}'
     },
     system:{
         messages:{
