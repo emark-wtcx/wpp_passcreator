@@ -23,9 +23,6 @@ module.exports = function configJSON(req) {
           },
           {
           "emailAddress": "{{InteractionDefaults.emailaddress}}"
-          },
-          {
-          "phoneNumber": "{{Contact.Default.PhoneNumber}}"
           }
         ],
         outArguments: [],
