@@ -8,6 +8,7 @@ module.exports = function configJSON(req) {
     },
     // For Custom Activity this must say, "REST"
     type: 'REST',
+    // Translation Setup
     lang: {
       'en-GB': {
         name: 'Pass Creator',
@@ -45,13 +46,13 @@ module.exports = function configJSON(req) {
     },
     configurationArguments: {
       publish: {
-        url: `https://${req.headers.host}/modules/pass_creator/publish`
+        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
       },
       validate: {
-        url: `https://${req.headers.host}/modules/pass_creator/validate`
+        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
       },
       stop: {
-        url: `https://${req.headers.host}/modules/pass_creator/stop`
+        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
       }
     },
     wizardSteps: [

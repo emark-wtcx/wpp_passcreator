@@ -166,8 +166,7 @@ const jbApp = {
             jbApp.bindRibbonClose()
     
             //Update UI on progress
-            jbApp.setProgress(66)
-            //if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
+            jbApp.setProgress(66)            
         }else{
             jbApp.transferMessage()
         }
@@ -192,7 +191,6 @@ const jbApp = {
     
             //Update UI on progress
             jbApp.setProgress(66)
-            //if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
         }else{
             // Transfer Message
             jbApp.selectMessage()
