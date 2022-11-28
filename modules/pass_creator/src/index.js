@@ -14,7 +14,20 @@ const jbApp = {
         'email':'This is message 3: {email}'
         }
     },
-    steps:[1,2,3],  
+    steps:[
+        {
+          "label": "Select Type",
+          "key": 'select'
+        },
+        {
+          "label": "Configure Message",
+          "key": 'configure'
+        },
+        {
+          "label": "Confirm",
+          "key": 'confirm'
+        },
+      ],  
     deStructure:{},
     parseSchema:function(){
         console.log('parseSchema')
@@ -41,12 +54,15 @@ const jbApp = {
             console.table('Localhost or Connection not availble')
         }         
     },
-    getSteps:function(){   
+    getSteps:function(activeStep){   
         var returnArray = []     
         if (jbApp.hasOwnProperty('steps') && jbApp.steps.length > 0){
             for (var i in jbApp.steps){
-                var number = jbApp.steps[i]
-                returnArray.push('{ "label": "Step '+number+'", "key": "step'+number+'"}')
+                var stepTemplate = jbApp.steps[i]
+                if (activeStep-1 == i){
+                    stepTemplate.active=true
+                }
+                returnArray.push(stepTemplate)
             }
         }
         return returnArray
