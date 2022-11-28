@@ -65,7 +65,7 @@ const jbApp = {
                     var html = jbApp.getHtml('inputMessage')
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
-                    //if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
+                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(1));
                     break;
     
                 case 'selectMessage':
@@ -73,22 +73,24 @@ const jbApp = {
     
                     $('#home').html('Cancel').data('action','home')
                     jbApp.setProgress(33)
-                    //if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
+                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(1));
                     break;
     
                 case 'previewMessage':
                     jbApp.previewMessageButtonAction()
+                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
                     break;
     
                 case 'previewSelectMessage':
                     jbApp.previewSelectMessageButtonAction()
+                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(2));
                     break;
                 
                 case 'home':
                     var html = jbApp.getHtml('home')
                     $('#home').text('Home').data('action','home')
                     jbApp.setProgress(0)
-                    //if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(1));
+                    if (jbApp.isLocalhost == false) connection.trigger('updateSteps', jbApp.getSteps(0));
                 break;
     
                 default:

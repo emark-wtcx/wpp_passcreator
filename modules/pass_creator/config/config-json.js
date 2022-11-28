@@ -51,6 +51,20 @@ module.exports = function configJSON(req) {
         url: `https://${req.headers.host}/modules/pass_creator/stop`
       }
     },
+    wizardSteps: [
+      {
+        "label": "Select Type",
+        "key": 0
+      },
+      {
+        "label": "Configure Message",
+        "key": 1
+      },
+      {
+        "label": "Confirm",
+        "key": 2
+      },
+    ],    
     userInterfaces: {
       configurationSupportsReadOnlyMode : true,
       configInspector: {
