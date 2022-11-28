@@ -34,8 +34,8 @@ module.exports = function configJSON(req) {
         // It must run under HTTPS
         url: `https://eol3vy07fc9qzyh.m.pipedream.net`,
         verb: 'POST',
-        body: "",
         format: "json",
+        useJwt: false,
         // The amount of time we want Journey Builder to wait before cancel the request. Default is 60000, Minimal is 1000
         timeout: 10000,
         // how many retrys if the request failed with 5xx error or network error. default is 0
