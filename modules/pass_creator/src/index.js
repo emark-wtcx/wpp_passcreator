@@ -122,7 +122,7 @@ const jbApp = {
                 break;
     
                 default:
-                    var html = jbApp.getHtml('error')
+                    jbApp.pageHtml = jbApp.getHtml('error')
                     break;
             }
             if (jbApp.pageHtml.length){
@@ -324,6 +324,7 @@ const jbApp = {
     },
     getHtml:function(page){
         var html = jbApp.html[page]
+        jbApp.pageHtml = html
         return html;
     },
     closeRibbon:function(){    
@@ -360,7 +361,7 @@ const jbApp = {
                 </div>
             </div><br />
             <div class="slds-col slds-size_3-of-3">
-                <button id="button1" data-action="previewMessage" class="slds-button slds-button_brand pass_action">Preview Message</button>
+                <button id="button1" data-action="previewMessage" class="slds-button slds-button_brand pass_action">Select Message</button>
             </div>
         </div>
         `,
@@ -379,7 +380,7 @@ const jbApp = {
                 </div>
             </div><br />
             <div class="slds-col slds-size_3-of-3">
-                <button id="button1" data-action="previewSelectMessage" class="slds-button slds-button_brand pass_action">Preview Message</button>
+                <button id="button1" data-action="previewSelectMessage" class="slds-button slds-button_brand pass_action">Select Message</button>
             </div>
         </div>
         `,
