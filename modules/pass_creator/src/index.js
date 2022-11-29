@@ -1,5 +1,16 @@
+/**
+ * Communication layer
+ */
 import Postmonger from 'postmonger';
 
+/**
+ * Show Console Output?
+ */
+const debug = true;
+
+/**
+ * Custom app
+ */
 const jbApp = {  
     isLocalhost:(location.hostname === 'localhost' || location.hostname === '127.0.0.1'),
     system:{
@@ -30,419 +41,7 @@ const jbApp = {
       ],  
     pageHtml:'',
     deStructure:{},
-    parseSchema:function(){
-        console.log('parseSchema')
-        if (
-            jbApp.hasOwnProperty('schema')
-            && jbApp.schema.length>0
-            ){
-                console.log('schema: '+JSON.stringify(jbApp.schema))
-                for (var i in jbApp.schema){
-                    var schemaItem = jbApp.schema[i]
-                    var fieldName = schemaItem.name
-                    var fieldTag = schemaItem.key
-                    jbApp.deStructure[fieldName] = '{{'+fieldTag+'}}'
-                    console.log('['+fieldName+']:'+fieldTag)
-                }
-            }
-        console.log('jbApp.deStructure: ')
-        console.table(jbApp.deStructure)
-        console.log('jbApp.deStructure.length: '+jbApp.deStructure.toString().length)
-
-        if (!jbApp.isLocalhost && typeof connection !== 'undefined'){
-            console.table(connection)
-        }else{
-            console.table('Localhost or Connection not availble')
-        }         
-    },
-    getCurrentStep:function(){
-        var stepSelector = '.steps-container li'
-        var selectedStep = 0
-        $(stepSelector).each(function(){
-            let elem = $(this)
-            if (elem.hasClass('active')){
-                selectedStep = elem.data('step-index')
-            }
-        })
-        return selectedStep++
-    },
-    getSteps:function(activeStep){   
-        var returnArray = []     
-        if (jbApp.hasOwnProperty('steps') && jbApp.steps.length > 0){
-            for (var i in jbApp.steps){
-                var stepTemplate = jbApp.steps[i]
-                if (activeStep-1 == i){
-                    stepTemplate.active=true
-                }
-                returnArray.push(stepTemplate)
-            }
-        }
-        return returnArray
-    },
-    setMenu:function(connection){
-        console.log('Preparing document')
-        $('.pass_action').on('click',function( elem ) {
-            var html='';
-            var id = $( this ).prop('id')
-            console.log('Button #'+ id + ": " + $( this ).text() );
-            var action = $(this).data('action');
-            console.log('Action to process: '+action)
-            switch(action){
-    
-                case 'inputMessage':     
-                    jbApp.inputMessageButtonAction()
-                    break;
-    
-                case 'selectMessage':
-                    jbApp.selectMessageButtonAction()
-                    break;
-    
-                case 'previewMessage':
-                    jbApp.previewMessageButtonAction()
-                    if (jbApp.isLocalhost == false) {                        
-                        if(jbApp.getCurrentStep() === 'configure') {
-                            connection.trigger('nextStep')
-                            }
-                        console.log('Step: 3')
-                    }
-                    break;
-    
-                case 'previewSelectMessage':
-                    jbApp.previewSelectMessageButtonAction()
-                    if (jbApp.isLocalhost == false) {
-                        if(jbApp.getCurrentStep() === 'configure') {
-                            connection.trigger('nextStep')
-                            }
-                        console.log('Step: 3')
-                    }
-                    break;
-                
-                case 'home':
-                    jbApp.homeButtonAction()
-                break;
-    
-                default:
-                    jbApp.pageHtml = jbApp.getHtml('error')
-                    break;
-            }
-            if (jbApp.pageHtml.length){
-                $('#main').html(jbApp.pageHtml);
-                if (action == 'selectMessage'){
-                    jbApp.buildMessageOptions()
-                }            
-            }
-            
-            jbApp.setMenu(connection)           
-    
-        });
-    },
-    homeButtonAction:function(){
-        jbApp.pageHtml = jbApp.getHtml('home')
-        $('#home').text('Home').data('action','home')        
-        jbApp.setProgress(0)
-        if (jbApp.isLocalhost == false) {
-            //connection.trigger('updateSteps', jbApp.getSteps(1));            
-            connection.trigger('prevStep')
-            console.log('Step: 1')
-        }
-    },
-    inputMessageButtonAction:function(){   
-        jbApp.html = jbApp.getHtml('inputMessage')
-        $('#home').html('Cancel').data('action','home')
-        jbApp.setProgress(33)
-        if (jbApp.isLocalhost == false) {
-            if(jbApp.getCurrentStep() === 'select') {
-            connection.trigger('nextStep')
-            }
-            console.log('Step: 2')
-        }
-    },
-    selectMessageButtonAction:function(){        
-        jbApp.html = jbApp.getHtml('selectMessage')
-    
-        $('#home').html('Cancel').data('action','home')
-        jbApp.setProgress(33)
-        if (jbApp.isLocalhost == false) {
-            if(jbApp.getCurrentStep() === 'select') {
-            connection.trigger('nextStep')
-            }
-            console.log('Step: 2')
-        }
-    },
-    previewMessageButtonAction:function(){
-        var blockDisplay = 'none'
-        if ($('#notification_ribbon').length>0){
-            var blockDisplay = 'shown'
-        }    
-        console.log('blockDisplay: '+blockDisplay)
-        if (blockDisplay == 'none'){  
-            // Show ribbon
-            var ribbon = jbApp.getHtml('ribbon')
-            $('#main').append(ribbon);
-            
-            // Transfer Message
-            jbApp.transferMessage()
-    
-            // Make sure we can close the ribbon after presenting it
-            jbApp.bindRibbonClose()
-    
-            //Update UI on progress
-            jbApp.setProgress(66)            
-        }else{
-            jbApp.transferMessage()
-        }
-    },
-    previewSelectMessageButtonAction:function(){
-        console.log('!previewSelectMessageButtonAction!')
-        var blockDisplay = 'none'
-        if ($('#notification_ribbon').length>0){
-            var blockDisplay = 'shown'
-        }    
-        console.log('blockDisplay: '+blockDisplay)
-        if (blockDisplay == 'none'){  
-            // Show ribbon
-            var ribbon = jbApp.getHtml('ribbon')
-            $('#main').append(ribbon);
-            
-            // Transfer Message
-            jbApp.selectMessage()
-    
-            // Make sure we can close the ribbon after presenting it
-            jbApp.bindRibbonClose()
-    
-            //Update UI on progress
-            jbApp.setProgress(66)
-        }else{
-            // Transfer Message
-            jbApp.selectMessage()
-            jbApp.transferMessage()
-        }
-    },
-    transferMessage:function(){
-        /**
-         * Check we have the jbApp 
-         */
-        console.log('jbApp:')
-        console.table(jbApp)
-            
-        /**
-         * Get the message
-         */
-        var previewMessage = $('#pass_message').val()
-    
-        /**
-         * Check we have the data to parse 
-         */
-        if (jbApp.hasOwnProperty('subscriber') && previewMessage != undefined){
-            console.log('Checking data: '+JSON.stringify(jbApp.system.subscriber))
-            
-            /**
-             * Loop through the attributes
-             */
-            for (var key in jbApp.system.subscriber){
-                console.log('Checking key ('+key+')')
-                var value = jbApp.system.subscriber[key]
-                var keyTag = '{'+key+'}'
-                console.log('Value: '+value)
-                previewMessage = previewMessage.replaceAll(keyTag, value)
-            }
-        }
-        console.log('Placing message: '+previewMessage)
-        $('#modal_message').html(previewMessage)
-    },
-    selectMessage:function(){
-        /**
-         * Check we have the jbApp 
-         */
-        console.log('jbApp:')
-        console.table(jbApp)
-            
-        /**
-         * Get the message choice
-         */
-        var selectedMessage = $('#messageSelector option:selected').val()    
-        console.log('selectedMessage:' + selectedMessage)
-    
-        /**
-         * Check we have the data to parse 
-         */
-         var messages = jbApp.getMessageOptions()
-        if (selectedMessage.length > -1 && messages.toString().length > 0){
-            var previewMessage = messages[selectedMessage]
-            console.log('Selected Message: '+previewMessage)
-            
-            /**
-             * Loop through the attributes
-             */
-            for (var key in jbApp.system.subscriber){
-                console.log('Checking key ('+key+')')
-                var value = jbApp.system.subscriber[key]
-                var keyTag = '{'+key+'}'
-                console.log('Value: '+value)
-                previewMessage = previewMessage.replaceAll(keyTag, value)
-            }
-        }
-        console.log('Placing selected message: '+previewMessage)
-        $('#modal_message').html(previewMessage)
-        if ($('#modal_message').html() != ''){
-            connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true });
-            jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
-            jbApp.payload["metaData"].isConfigured = true;
-            console.log('Payload: ')
-            console.table(jbApp.payload)
-            connection.trigger('updateActivity', jbApp.payload);
-        }
-    },
-    getMessageOptions:function(){
-        if (!jbApp.isLocalhost){
-            return jbApp.deStructure
-        }else{
-            return jbApp.system.messages
-        }
-    },
-    buildMessageOptions:function(){
-        var messages = jbApp.getMessageOptions()
-        console.log('Messages:')
-        console.table(messages)
-    
-        if (messages.toString().length>0){
-            var count = 0
-            console.log('We have Messages:')
-            for (var i in messages){
-                console.log('Message#:'+i)
-                count++
-                var message = messages[i]
-                console.log('Message:'+message)
-                if (message != '' && message.length>0){
-                    var option = '<option value="'+i+'">'+i+'</option>'
-                    $('#messageSelector').append(option)
-                }
-            }
-        }else{
-            console.log('We have no Messages')
-        }
-    },
-    getHtml:function(page){
-        var html = jbApp.html[page]
-        jbApp.pageHtml = html
-        return html;
-    },
-    closeRibbon:function(){    
-        console.log('remove ribbon') 
-        $('.slds-notify_container').remove()
-    },
-    bindRibbonClose:function(){
-        console.log('bind modal close')
-        $('.slds-notify__close button').on('click',function(){
-            jbApp.closeRibbon()
-        });
-    },
-    setProgress:function(amount){
-        console.log('Setting progress: '+amount)
-        var html = '<div class="slds-progress-bar" id="progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+(100-amount)+'" aria-label="{{Placeholder for description of progress bar}}" role="progressbar">'
-        html += '    <span class="slds-progress-bar__value" id="progress-val" style="width:'+amount+'%">'
-        html += '        <span class="slds-assistive-text" id="progress-text">Progress: '+amount+'%</span>'
-        html += '    </span>'
-        html += '</div>'
-        $( '#progress-holder' ).html(html)
-    },
-    message:null,
-    html:{
-        home:'<h1>Choose Activity</h1>',
-        error:'<h1>An error occurred</h1>',
-        inputMessage:`
-        <div id="passcreator">
-            <h1>Pass Creator - WPP</h1>
-            <p>Please input your required message:</p>
-            <div class="slds-form-element">
-                <label class="slds-form-element__label" for="textarea-id-01">Textarea Label</label>
-                <div class="slds-form-element__control">
-                    <textarea id="pass_message" placeholder="Placeholder text…" class="slds-textarea"></textarea>
-                </div>
-            </div><br />
-            <div class="slds-col slds-size_3-of-3">
-                <button id="button1" data-action="previewMessage" class="slds-button slds-button_brand pass_action">Select Message</button>
-            </div>
-        </div>
-        `,
-        selectMessage:`
-        <div id="passcreator">
-            <h1>Pass Creator - WPP</h1>
-            <p>Select the required message</p>
-            <div class="slds-form-element">
-                <label class="slds-form-element__label" for="select-01">Select Message</label>
-                <div class="slds-form-element__control">
-                    <div class="slds-select_container">
-                    <select class="slds-select" id="messageSelector">
-                        <option value="">Select…</option>
-                    </select>
-                    </div>
-                </div>
-            </div><br />
-            <div class="slds-col slds-size_3-of-3">
-                <button id="button1" data-action="previewSelectMessage" class="slds-button slds-button_brand pass_action">Select Message</button>
-            </div>
-        </div>
-        `,
-        previewMessage:`
-            <div id="passcreator">
-            <h1>Pass Creator - WPP</h1>
-            <p>Here's what your message will look like</p>
-            <div class="slds-form-element">
-                <label class="slds-form-element__label" for="textarea-id-01">Textarea Label</label>
-                <div class="slds-form-element__control">
-                    <textarea id="pass_message" placeholder="Placeholder text…" class="slds-textarea" readonly></textarea>
-                </div>
-            </div>
-        </div>
-        `,
-        modal:`<section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
-        <div class="slds-modal__container">
-        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
-        <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
-        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
-        </svg>
-        <span class="slds-assistive-text">Cancel and close</span>
-        </button>
-        <div class="slds-modal__header">
-        <h1 id="modal-header" class="slds-modal__title slds-hyphenate">Modal header</h1>
-        </div>
-        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-        <p id="modal_message"></p>
-        </div>
-        <div class="slds-modal__footer">
-        <button class="slds-button slds-button_neutral" aria-label="Cancel and close">Cancel</button>
-        <button class="slds-button slds-button_brand">Save</button>
-        </div>
-        </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
-        `,
-        ribbon:`<div class="slds-notify_container slds-is-relative" id="notification_ribbon">
-        <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
-          <span class="slds-assistive-text">success</span>
-          <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
-            <svg class="slds-icon slds-icon_small" aria-hidden="true">
-              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
-            </svg>
-          </span>
-          <div class="slds-notify__content">
-            <h2 class="slds-text-heading_small " id="modal_message"></h2>
-          </div>
-          <div class="slds-notify__close">
-            <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
-              <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
-                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
-              </svg>
-              <span class="slds-assistive-text">Close</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      `,
-
-        
-    }, 
+    message:'',
     soap:{
         getDataExtension:`
         <?xml version="1.0" encoding="UTF-8"?>
@@ -472,8 +71,338 @@ const jbApp = {
 </s:Envelope>
         `
     },
+    parseSchema:function(){
+        if (debug) console.log('parseSchema')
+        if (
+            jbApp.hasOwnProperty('schema')
+            && jbApp.schema.length>0
+            ){
+                if (debug) console.log('schema: '+JSON.stringify(jbApp.schema))
+                for (var i in jbApp.schema){
+                    var schemaItem = jbApp.schema[i]
+                    var fieldName = schemaItem.name
+                    var fieldTag = schemaItem.key
+                    jbApp.deStructure[fieldName] = '{{'+fieldTag+'}}'
+                    if (debug) console.log('['+fieldName+']:'+fieldTag)
+                }
+            }
+        if (debug) console.log('jbApp.deStructure: ')
+        if (debug) console.table(jbApp.deStructure)
+        if (debug) console.log('jbApp.deStructure.length: '+jbApp.deStructure.toString().length)
+
+        if (!jbApp.isLocalhost && typeof connection !== 'undefined'){
+            if (debug) console.table(connection)
+        }else{
+            if (debug) console.table('Localhost or Connection not availble')
+        }         
+    },
+    getCurrentStep:function(){
+        var stepSelector = '.steps-container li'
+        var selectedStep = 0
+        $(stepSelector).each(function(){
+            let elem = $(this)
+            if (elem.hasClass('active')){
+                selectedStep = elem.data('step-index')
+            }
+        })
+        return selectedStep++
+    },
+    getSteps:function(activeStep){   
+        var returnArray = []     
+        if (jbApp.hasOwnProperty('steps') && jbApp.steps.length > 0){
+            for (var i in jbApp.steps){
+                var stepTemplate = jbApp.steps[i]
+                if (activeStep-1 == i){
+                    stepTemplate.active=true
+                }
+                returnArray.push(stepTemplate)
+            }
+        }
+        return returnArray
+    },
+    setMenu:function(connection){
+        if (debug) console.log('Preparing menu')
+        $('.pass_action').on('click',function( elem ) {
+            if (debug) console.log('Button #'+ id + ": " + $( this ).text() );
+
+            var refeshPage=true;
+            var id = $( this ).prop('id')
+
+            var action = $(this).data('action');
+            if (debug) console.log('Action to process: '+action)
+            switch(action){
+    
+                case 'inputMessage':     
+                    jbApp.inputMessageButtonAction()
+                    break;
+    
+                case 'selectMessage':
+                    jbApp.selectMessageButtonAction()
+                    break;
+    
+                case 'previewMessage':
+                    // We don't want to destroy the input, only
+                    // to show a ribon containing the message
+                    refeshPage=false
+
+                    jbApp.previewMessageButtonAction()
+                    break;
+    
+                case 'previewSelectMessage':
+                    // We don't want to destroy the input, only
+                    // to show a ribon containing the message
+                    refeshPage=false
+
+                    jbApp.previewSelectMessageButtonAction()
+                    break;
+                
+                case 'home':
+                    jbApp.homeButtonAction()
+                    break;
+    
+                default:
+                    jbApp.pageHtml = jbApp.getHtml('error')
+                    break;
+            }
+            if (refeshPage==true
+                &&jbApp.hasOwnProperty('pageHtml')
+                && jbApp.pageHtml != undefined
+                && jbApp.pageHtml.length
+                ){
+                // Load HTML
+                $('#main').html(jbApp.pageHtml);         
+
+                // After loading, enhance html
+                if (action == 'selectMessage'){
+                    jbApp.buildMessageOptions()
+                }   
+            }
+            
+            jbApp.setMenu(connection)           
+    
+        }); 
+    },
+    homeButtonAction:function(){
+        jbApp.pageHtml = jbApp.getHtml('home')
+        $('#home').text('Home').data('action','home')        
+        jbApp.setProgress(0)
+        if (jbApp.isLocalhost == false) {
+            //connection.trigger('updateSteps', jbApp.getSteps(1));            
+            connection.trigger('prevStep')
+            if (debug) console.log('Step: 1')
+        }
+    },
+    inputMessageButtonAction:function(){   
+        jbApp.html = jbApp.getHtml('inputMessage')
+
+        $('#home').html('Cancel').data('action','home')
+        jbApp.setProgress(33)
+        if (jbApp.isLocalhost == false) {
+            if(jbApp.getCurrentStep() === 'select') {
+            connection.trigger('nextStep')
+            }
+            if (debug) console.log('Step: 2')
+        }
+    },
+    selectMessageButtonAction:function(){        
+        jbApp.html = jbApp.getHtml('selectMessage')
+    
+        $('#home').html('Cancel').data('action','home')
+        jbApp.setProgress(33)
+        if (jbApp.isLocalhost == false) {
+            if(jbApp.getCurrentStep() === 'select') {
+                connection.trigger('nextStep')
+            }
+            if (debug) console.log('Step: 2')
+        }
+    },
+    previewMessageButtonAction:function(){
+        var blockDisplay = 'none'
+        if ($('#notification_ribbon').length>0){
+            var blockDisplay = 'shown'
+        }    
+        if (debug) console.log('blockDisplay: '+blockDisplay)
+        if (blockDisplay == 'none'){  
+            // Show ribbon
+            var ribbon = jbApp.getHtml('ribbon')
+            $('#main').append(ribbon);
+            
+            // Transfer Message
+            jbApp.transferMessage()
+    
+            // Make sure we can close the ribbon after presenting it
+            jbApp.bindRibbonClose()
+    
+            //Update UI on progress
+            jbApp.setProgress(66)            
+        }else{
+            jbApp.transferMessage()
+        }   
+        
+        // Message Selected - Move onto next step
+        if (jbApp.isLocalhost == false) {                        
+            if(jbApp.getCurrentStep() === 'configure') {
+                connection.trigger('nextStep')
+                }
+            if (debug) console.log('Step: 3')
+        }
+    },
+    previewSelectMessageButtonAction:function(){
+        if (debug) console.log('!previewSelectMessageButtonAction!')
+
+        var blockDisplay = 'none'
+        if ($('#notification_ribbon').length>0){
+            var blockDisplay = 'shown'
+        }    
+        if (debug) console.log('blockDisplay: '+blockDisplay)
+        if (blockDisplay == 'none'){  
+            // Show ribbon
+            var ribbon = jbApp.getHtml('ribbon')
+            $('#main').append(ribbon);
+            
+            // Transfer Message
+            jbApp.selectMessage()
+    
+            // Make sure we can close the ribbon after presenting it
+            jbApp.bindRibbonClose()
+    
+            //Update UI on progress
+            jbApp.setProgress(66)
+        }else{
+            // Transfer Message
+            jbApp.selectMessage()
+            jbApp.transferMessage()
+        }
+
+        // Message Selected - Move onto next step
+        if (jbApp.isLocalhost == false) {                        
+            if(jbApp.getCurrentStep() === 'configure') {
+                connection.trigger('nextStep')
+                }
+            if (debug) console.log('Step: 3')
+        }
+    },
+    transferMessage:function(){
+        /**
+         * Check we have the jbApp 
+         */
+        if (debug) console.log('jbApp:')
+        if (debug) console.table(jbApp)
+            
+        /**
+         * Get the message
+         */
+        var previewMessage = $('#pass_message').val()
+    
+        /**
+         * Check we have the data to parse 
+         */
+        if (jbApp.hasOwnProperty('subscriber') && previewMessage != undefined){
+            if (debug) console.log('Checking data: '+JSON.stringify(jbApp.system.subscriber))
+            
+            /**
+             * Loop through the attributes
+             */
+            for (var key in jbApp.system.subscriber){
+                if (debug) console.log('Checking key ('+key+')')
+                var value = jbApp.system.subscriber[key]
+                var keyTag = '{'+key+'}'
+                if (debug) console.log('Value: '+value)
+                previewMessage = previewMessage.replaceAll(keyTag, value)
+            }
+        }
+        if (debug) console.log('Placing message: '+previewMessage)
+        $('#modal_message').html(previewMessage)
+    },
+    selectMessage:function(){
+        /**
+         * Check we have the jbApp 
+         */
+        if (debug) console.log('jbApp:')
+        if (debug) console.table(jbApp)
+            
+        /**
+         * Get the message choice
+         */
+        var selectedMessage = $('#messageSelector option:selected').val()    
+        if (debug) console.log('selectedMessage:' + selectedMessage)
+    
+        /**
+         * Check we have the data to parse 
+         */
+         var messages = jbApp.getMessageOptions()
+        if (selectedMessage.length > -1 && messages.toString().length > 0){
+            var previewMessage = messages[selectedMessage]
+            if (debug) console.log('Selected Message: '+previewMessage)
+            
+            /**
+             * Loop through the attributes
+             */
+            for (var key in jbApp.system.subscriber){
+                if (debug) console.log('Checking key ('+key+')')
+                var value = jbApp.system.subscriber[key]
+                var keyTag = '{'+key+'}'
+                if (debug) console.log('Value: '+value)
+                previewMessage = previewMessage.replaceAll(keyTag, value)
+            }
+        }
+        if (debug) console.log('Placing selected message: '+previewMessage)
+        $('#modal_message').html(previewMessage)
+        if ($('#modal_message').html() != ''){              
+            connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
+        }
+    },
+    getMessageOptions:function(){
+        if (!jbApp.isLocalhost){
+            return jbApp.deStructure
+        }else{
+            return jbApp.system.messages
+        }
+    },
+    buildMessageOptions:function(){
+        var messages = jbApp.getMessageOptions()
+        if (debug) console.log('Messages:')
+        if (debug) console.table(messages)
+    
+        if (messages.toString().length>0){
+            var count = 0
+            if (debug) console.log('We have Messages:')
+            for (var i in messages){
+                if (debug) console.log('Message#:'+i)
+                count++
+                var message = messages[i]
+                if (debug) console.log('Message:'+message)
+                if (message != '' && message.length>0){
+                    var option = '<option value="'+i+'">'+i+'</option>'
+                    $('#messageSelector').append(option)
+                }
+            }
+        }else{
+            if (debug) console.log('We have no Messages')
+        }
+    },
+    closeRibbon:function(){    
+        if (debug) console.log('remove ribbon') 
+        $('.slds-notify_container').remove()
+    },
+    bindRibbonClose:function(){
+        if (debug) console.log('bind modal close')
+        $('.slds-notify__close button').on('click',function(){
+            jbApp.closeRibbon()
+        });
+    },
+    setProgress:function(amount){
+        if (debug) console.log('Setting progress: '+amount)
+        var html = '<div class="slds-progress-bar" id="progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+(100-amount)+'" aria-label="{{Placeholder for description of progress bar}}" role="progressbar">'
+        html += '    <span class="slds-progress-bar__value" id="progress-val" style="width:'+amount+'%">'
+        html += '        <span class="slds-assistive-text" id="progress-text">Progress: '+amount+'%</span>'
+        html += '    </span>'
+        html += '</div>'
+        $( '#progress-holder' ).html(html)
+    },
+
     getDataExtension:function(){
-        console.log('getDataExtension')
+        if (debug) console.log('getDataExtension')
         $.ajax({
             type: "POST",
             url: jbApp.webserUrl,
@@ -487,26 +416,26 @@ const jbApp = {
     },
 
     parseSoapResponse:function( response, request, settings ){
-        console.table(response)
+        if (debug) console.table(response)
     },
 
     soapSuccess:function (data, status, req) {
-        console.log('SuccessOccur')
+        if (debug) console.log('SuccessOccur')
         if (status == "success")
             alert(req.responseText);
     },
 
     soapError:function(data, status, req) {
-        console.log('ErrorOccur')
+        if (debug) console.log('ErrorOccur')
         alert(req.responseText + " " + status);
     },
     
     load:function(connection){
-        console.log('Loading jbApp')
+        if (debug) console.log('Loading jbApp')
         // If JourneyBuilder available
         if (connection){            
-            console.log('App input:')
-            console.table(connection)
+            if (debug) console.log('App input:')
+            if (debug) console.table(connection)
             // Inherit properties from JourneyBuilder
             if (connection.hasOwnProperty('version')){
                 jbApp.Version = connection.version 
@@ -521,13 +450,90 @@ const jbApp = {
 
 
         // Announce ready
-        console.log('App Loading Complete')
+        if (debug) console.log('App Loading Complete')
         /*
         if (!jbApp.isLocalhost){window.parent.postMessage(jbApp)}
         else{window.jbApp = jbApp}
         */
        window.jbApp = jbApp
-    }
+    },
+    
+    getHtml:function(page){
+        var html = {
+            home:'<h1>Choose Activity</h1>',
+            error:'<h1>An error occurred</h1>',
+            inputMessage:`
+            <div id="passcreator">
+                <h1>Pass Creator - WPP</h1>
+                <p>Please input your required message:</p>
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="textarea-id-01">Textarea Label</label>
+                    <div class="slds-form-element__control">
+                        <textarea id="pass_message" placeholder="Placeholder text…" class="slds-textarea"></textarea>
+                    </div>
+                </div><br />
+                <div class="slds-col slds-size_3-of-3">
+                    <button id="button1" data-action="previewMessage" class="slds-button slds-button_brand pass_action">Select Message</button>
+                </div>
+            </div>
+            `,
+            selectMessage:`
+            <div id="passcreator">
+                <h1>Pass Creator - WPP</h1>
+                <p>Select the required message</p>
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="select-01">Select Message</label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-select_container">
+                        <select class="slds-select" id="messageSelector">
+                            <option value="">Select…</option>
+                        </select>
+                        </div>
+                    </div>
+                </div><br />
+                <div class="slds-col slds-size_3-of-3">
+                    <button id="button1" data-action="previewSelectMessage" class="slds-button slds-button_brand pass_action">Select Message</button>
+                </div>
+            </div>
+            `,
+            previewMessage:`
+                <div id="passcreator">
+                <h1>Pass Creator - WPP</h1>
+                <p>Here's what your message will look like</p>
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="textarea-id-01">Textarea Label</label>
+                    <div class="slds-form-element__control">
+                        <textarea id="pass_message" placeholder="Placeholder text…" class="slds-textarea" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            `,
+            ribbon:`<div class="slds-notify_container slds-is-relative" id="notification_ribbon">
+                <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                <span class="slds-assistive-text">success</span>
+                <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                    <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#success"></use>
+                    </svg>
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small " id="modal_message"></h2>
+                </div>
+                <div class="slds-notify__close">
+                    <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+                    <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Close</span>
+                    </button>
+                </div>
+                </div>
+            </div>
+            `        
+        }
+        jbApp.pageHtml = html[page]
+        return jbApp.pageHtml;
+    },
 }
 
 // Create a new connection for this session.
@@ -632,7 +638,12 @@ function onInitActivity(payload) {
     return jbApp
 }
 
-function onDoneButtonClick() {
+function onDoneButtonClick() {              
+    jbApp.payload["metaData"].isConfigured = true; 
+    jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
+    connection.trigger('updateActivity', jbApp.payload);
+
+    /* Original code below
     // we set must metaData.isConfigured in order to tell JB that
     // this activity is ready for activation
     activity.metaData.isConfigured = true;
@@ -654,6 +665,7 @@ function onDoneButtonClick() {
     console.log('--------------------------------------------------------------');
 
     connection.trigger('updateActivity', activity);
+    */
 }
 
 function onCancelButtonClick() {
