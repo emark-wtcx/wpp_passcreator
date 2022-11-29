@@ -282,27 +282,26 @@ const jbApp = {
             if (debug) console.log('Step: 3')
         }
     },
-    confirmSelectedMessage:function(){
-
-    },
     setUiControls:function(){          
-        if ($('#modal_message').html() != ''){      
+        if ($('#modal_message').html() != ''){    
+            // Configured  
             if (jbApp.isLocalhost == false){     
-                // Done        
+                // Production        
                 if (debug) console.log('Enabled production button') 
                 connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
             }else{   
-                // Done
+                // Development
                 if (debug) console.log('Enabled development button')         
                 $('#done').text('Done').prop('disabled',false)   
             }
         }else{ 
+            // Not Configured, Cancel
             if (jbApp.isLocalhost == false){     
-                // Done        
+                // Production        
                 if (debug) console.log('Disabled production button') 
                 connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:false }); 
             }else{   
-                // Done
+                // Development
                 if (debug) console.log('Disabled development button')         
                 $('#done').text('Done').prop('disabled',true)   
             }
