@@ -12,7 +12,7 @@ const debug = true;
  * Custom app
  */
 const jbApp = {  
-    isLocalhost:(location.hostname === 'localhost' || location.hostname === '127.0.0.1'),
+    isLocalhost:(window.parent.location.hostname === 'localhost' || window.parent.location.hostname === '127.0.0.1'),
     system:{
         subscriber:{
             'firstname':'{{Contact.Default.FirstName}}',
@@ -241,7 +241,7 @@ const jbApp = {
             // Make sure we can close the ribbon after presenting it
             jbApp.bindRibbonClose()
     
-            //Update UI on progress
+            // Update UI on progress
             jbApp.setProgress(66)            
         }else{
             jbApp.transferMessage()
@@ -276,7 +276,7 @@ const jbApp = {
             // Make sure we can close the ribbon after presenting it
             jbApp.bindRibbonClose()
     
-            //Update UI on progress
+            // Update UI on progress
             jbApp.setProgress(66)
         }else{
             // Transfer Message
@@ -302,9 +302,9 @@ const jbApp = {
                 connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
                 if (debug) console.log('Enabled production button')
             }else{   
-                // Development
-                if (debug) console.log('Enabled development button')         
+                // Development        
                 $('#done').text('Done').prop('disabled',false)   
+                if (debug) console.log('Enabled development button') 
             }
         }else{ 
             // Not Configured, Cancel
@@ -313,9 +313,9 @@ const jbApp = {
                 connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:false });
                 if (debug) console.log('Disabled production button')  
             }else{   
-                // Development
-                if (debug) console.log('Disabled development button')         
+                // Development      
                 $('#done').text('Done').prop('disabled',true)   
+                if (debug) console.log('Disabled development button')   
             }
         }
     },
