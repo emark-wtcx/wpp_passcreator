@@ -282,6 +282,32 @@ const jbApp = {
             if (debug) console.log('Step: 3')
         }
     },
+    confirmSelectedMessage:function(){
+
+    },
+    setUiControls:function(){          
+        if ($('#modal_message').html() != ''){      
+            if (jbApp.isLocalhost == false){     
+                // Done        
+                if (debug) console.log('Enabled production button') 
+                connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
+            }else{   
+                // Done
+                if (debug) console.log('Enabled development button')         
+                $('#done').text('Done').prop('disabled',false)   
+            }
+        }else{ 
+            if (jbApp.isLocalhost == false){     
+                // Done        
+                if (debug) console.log('Disabled production button') 
+                connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:false }); 
+            }else{   
+                // Done
+                if (debug) console.log('Disabled development button')         
+                $('#done').text('Done').prop('disabled',true)   
+            }
+        }
+    },
     transferMessage:function(){
         /**
          * Check we have the jbApp 
@@ -311,8 +337,17 @@ const jbApp = {
                 previewMessage = previewMessage.replaceAll(keyTag, value)
             }
         }
+
+        /**
+         * Place Message 
+         */
         if (debug) console.log('Placing message: '+previewMessage)
         $('#modal_message').html(previewMessage)
+
+        /**
+         * UI Controls
+         */        
+        jbApp.setUiControls()
     },
     selectMessage:function(){
         /**
@@ -330,7 +365,7 @@ const jbApp = {
         /**
          * Check we have the data to parse 
          */
-         var messages = jbApp.getMessageOptions()
+        var messages = jbApp.getMessageOptions()
         if (selectedMessage.length > -1 && messages.toString().length > 0){
             var previewMessage = messages[selectedMessage]
             if (debug) console.log('Selected Message: '+previewMessage)
@@ -346,11 +381,17 @@ const jbApp = {
                 previewMessage = previewMessage.replaceAll(keyTag, value)
             }
         }
+
+        /**
+         * Place Message 
+         */
         if (debug) console.log('Placing selected message: '+previewMessage)
         $('#modal_message').html(previewMessage)
-        if ($('#modal_message').html() != ''){              
-            connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
-        }
+        
+        /**
+         * UI Controls
+         */        
+        jbApp.setUiControls()
     },
     getMessageOptions:function(){
         if (!jbApp.isLocalhost){
@@ -451,11 +492,7 @@ const jbApp = {
 
         // Announce ready
         if (debug) console.log('App Loading Complete')
-        /*
-        if (!jbApp.isLocalhost){window.parent.postMessage(jbApp)}
-        else{window.jbApp = jbApp}
-        */
-       window.jbApp = jbApp
+        window.jbApp = jbApp
     },
     
     getHtml:function(page){
@@ -586,7 +623,7 @@ document.addEventListener('DOMContentLoaded', function main() {
 
      
     connection.trigger('requestInteraction');
-    connection.on('requestedInteraction', function (data) {
+    connection.on('requestedInteractions', function (data) {
         console.log('Requested Interaction:')
         console.table(data)
     });
