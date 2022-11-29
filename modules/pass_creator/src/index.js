@@ -137,7 +137,7 @@ const jbApp = {
                     break;
     
                 case 'selectMessage':
-                    jbApp.selectMessageButtonAction()
+                    jbApp.selectMessageButtonAction(connection)
                     break;
     
                 case 'previewMessage':
@@ -145,7 +145,7 @@ const jbApp = {
                     // to show a ribon containing the message
                     refeshPage=false
 
-                    jbApp.previewMessageButtonAction()
+                    jbApp.previewMessageButtonAction(connection)
                     break;
     
                 case 'previewSelectMessage':
@@ -192,25 +192,27 @@ const jbApp = {
             if (debug) console.log('Step: 1')
         }
     },
-    inputMessageButtonAction:function(){   
+    inputMessageButtonAction:function(connection){   
         jbApp.html = jbApp.getHtml('inputMessage')
 
         $('#home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
         if (jbApp.isLocalhost == false) {
             if(jbApp.getCurrentStep() === 'select') {
-            connection.trigger('nextStep')
+                if (debug) console.log('Connection Step: 2')
+                connection.trigger('nextStep')
             }
             if (debug) console.log('Step: 2')
         }
     },
-    selectMessageButtonAction:function(){        
+    selectMessageButtonAction:function(connection){        
         jbApp.html = jbApp.getHtml('selectMessage')
     
         $('#home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
         if (jbApp.isLocalhost == false) {
             if(jbApp.getCurrentStep() === 'select') {
+                if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
             }
             if (debug) console.log('Step: 2')
@@ -286,9 +288,9 @@ const jbApp = {
         if ($('#modal_message').html() != ''){    
             // Configured  
             if (jbApp.isLocalhost == false){     
-                // Production        
-                if (debug) console.log('Enabled production button') 
+                // Production         
                 connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
+                if (debug) console.log('Enabled production button')
             }else{   
                 // Development
                 if (debug) console.log('Enabled development button')         
@@ -296,10 +298,10 @@ const jbApp = {
             }
         }else{ 
             // Not Configured, Cancel
-            if (jbApp.isLocalhost == false){     
+            if (jbApp.isLocalhost == false){
                 // Production        
-                if (debug) console.log('Disabled production button') 
-                connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:false }); 
+                connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:false });
+                if (debug) console.log('Disabled production button')  
             }else{   
                 // Development
                 if (debug) console.log('Disabled development button')         
