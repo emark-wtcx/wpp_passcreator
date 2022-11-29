@@ -190,6 +190,8 @@ const jbApp = {
             //connection.trigger('updateSteps', jbApp.getSteps(1));            
             connection.trigger('prevStep')
             if (debug) console.log('Step: 1')
+        }else{            
+            if (debug) console.log('Local Step: 1')
         }
     },
     inputMessageButtonAction:function(connection){   
@@ -201,8 +203,10 @@ const jbApp = {
             if(jbApp.getCurrentStep() === 'select') {
                 if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
+                if (debug) console.log('Step: 2')
             }
-            if (debug) console.log('Step: 2')
+        }else{            
+            if (debug) console.log('Local Step: 2')
         }
     },
     selectMessageButtonAction:function(connection){        
@@ -214,8 +218,10 @@ const jbApp = {
             if(jbApp.getCurrentStep() === 'select') {
                 if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
+                if (debug) console.log('Step: 2')
             }
-            if (debug) console.log('Step: 2')
+        }else{            
+            if (debug) console.log('Local Step: 2')
         }
     },
     previewMessageButtonAction:function(){
@@ -245,8 +251,10 @@ const jbApp = {
         if (jbApp.isLocalhost == false) {                        
             if(jbApp.getCurrentStep() === 'configure') {
                 connection.trigger('nextStep')
+                if (debug) console.log('Step: 3')
                 }
-            if (debug) console.log('Step: 3')
+        }else{            
+            if (debug) console.log('Local Step: 3')
         }
     },
     previewSelectMessageButtonAction:function(){
@@ -280,8 +288,10 @@ const jbApp = {
         if (jbApp.isLocalhost == false) {                        
             if(jbApp.getCurrentStep() === 'configure') {
                 connection.trigger('nextStep')
+                if (debug) console.log('Step: 3')
                 }
-            if (debug) console.log('Step: 3')
+        }else{            
+            if (debug) console.log('Local Step: 3')
         }
     },
     setUiControls:function(){          
