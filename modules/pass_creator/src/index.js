@@ -98,7 +98,8 @@ const jbApp = {
     },
     getCurrentStep:function(){
         var stepSelector = '.steps-container li.active'
-        return $(stepSelector).data('step-index')
+        var stepCounter = $(stepSelector).data('step-index')
+        return (stepCounter ? stepCounter : 0)
     },
     getSteps:function(activeStep){   
         var returnArray = []     
