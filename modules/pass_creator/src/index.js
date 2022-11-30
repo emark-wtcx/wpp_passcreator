@@ -210,7 +210,7 @@ const jbApp = {
 
         $('#home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
-        let currentStep = jbApp.getCurrentStep()
+        var currentStep = jbApp.getCurrentStep()
         if (jbApp.isLocalhost != true) {
             if (debug) console.log('Non Local Step: '+currentStep)
             if(jbApp.getCurrentStep() == 0) {
@@ -228,7 +228,7 @@ const jbApp = {
     
         $('#home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
-        let currentStep = jbApp.getCurrentStep()
+        var currentStep = jbApp.getCurrentStep()
         if (jbApp.isLocalhost == false) {
             if (debug) console.log('Non Local Step: '+currentStep)
             if(jbApp.getCurrentStep() == 0) {
