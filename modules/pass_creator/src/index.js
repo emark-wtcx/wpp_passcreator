@@ -123,13 +123,23 @@ const jbApp = {
     setMenu:function(connection){
         if (debug) console.log('Preparing menu')
         $('.pass_action').on('click',function( elem ) {
+            var id = $( this ).prop('id')            
             if (debug) console.log('Button #'+ id + ": " + $( this ).text() );
-
+            
+            /**
+             * Presume we'll be changing the page
+             */
             var refeshPage=true;
-            var id = $( this ).prop('id')
 
+            /**
+             * Isolate the requested action
+             */
             var action = $(this).data('action');
             if (debug) console.log('Action to process: '+action)
+
+            /**
+             * Process the requested action
+             */
             switch(action){
     
                 case 'inputMessage':     
@@ -164,20 +174,28 @@ const jbApp = {
                     jbApp.pageHtml = jbApp.getHtml('error')
                     break;
             }
+
+            /** 
+             * Process any page changes
+             */
             if (refeshPage==true
                 &&jbApp.hasOwnProperty('pageHtml')
                 && jbApp.pageHtml != undefined
                 && jbApp.pageHtml.length
                 ){
-                // Load HTML
                 $('#main').html(jbApp.pageHtml);         
 
-                // After loading, enhance html
+                /**
+                 * After updating, enhance html if needed
+                 */
                 if (action == 'selectMessage'){
                     jbApp.buildMessageOptions()
                 }   
             }
             
+            /**
+             * Rebind menu after page change
+             */
             jbApp.setMenu(connection)           
     
         }); 
@@ -202,7 +220,7 @@ const jbApp = {
 
         if (jbApp.isLocalhost != true) {
 
-            if(jbApp.getCurrentStep() == '1') {
+            if(jbApp.getCurrentStep() == 1) {
                 if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 2')
@@ -220,7 +238,7 @@ const jbApp = {
 
         if (jbApp.isLocalhost == false) {
 
-            if(jbApp.getCurrentStep() == '1') {
+            if(jbApp.getCurrentStep() == 1) {
                 if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 2')
@@ -231,6 +249,7 @@ const jbApp = {
         }
     },
     previewMessageButtonAction:function(){
+        //TODO: Clean up this "block display" routine
         var blockDisplay = 'none'
         if ($('#notification_ribbon').length>0){
             var blockDisplay = 'shown'
