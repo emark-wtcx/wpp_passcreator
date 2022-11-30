@@ -98,7 +98,7 @@ const jbApp = {
     },
     getCurrentStep:function(){
         var stepSelector = '.steps-container li.active'
-        var stepCounter = parseInt($(stepSelector).data('step-index'))
+        var stepCounter = parseInt($('.steps-container li.active').data('step-index'))
         if (stepCounter > 0){
             console.log('Currently on step: '+stepCounter)
             return stepCounter
@@ -141,6 +141,14 @@ const jbApp = {
              * Process the requested action
              */
             switch(action){
+
+                case 'showStep':
+                    // We don't want to destroy the input, only
+                    // to show a ribon containing the message
+                    // (included in subsequent function)
+                    refeshPage=false
+                    jbApp.getCurrentStep()
+                    break
     
                 case 'inputMessage':     
                     jbApp.inputMessageButtonAction()
