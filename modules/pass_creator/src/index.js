@@ -147,7 +147,7 @@ const jbApp = {
                     break;
     
                 case 'selectMessage':
-                    jbApp.selectMessageButtonAction(connection)
+                    jbApp.selectMessageButtonAction()
                     break;
     
                 case 'previewMessage':
@@ -155,7 +155,7 @@ const jbApp = {
                     // to show a ribon containing the message
                     refeshPage=false
 
-                    jbApp.previewMessageButtonAction(connection)
+                    jbApp.previewMessageButtonAction()
                     break;
     
                 case 'previewSelectMessage':
@@ -212,7 +212,7 @@ const jbApp = {
             if (debug) console.log('Local Step: 1')
         }
     },
-    inputMessageButtonAction:function(connection){   
+    inputMessageButtonAction:function(){   
         jbApp.html = jbApp.getHtml('inputMessage')
 
         $('#home').html('Cancel').data('action','home')
@@ -230,7 +230,7 @@ const jbApp = {
             if (debug) console.log('Local Step: 2')
         }
     },
-    selectMessageButtonAction:function(connection){        
+    selectMessageButtonAction:function(){        
         jbApp.html = jbApp.getHtml('selectMessage')
     
         $('#home').html('Cancel').data('action','home')
@@ -664,7 +664,7 @@ document.addEventListener('DOMContentLoaded', function main() {
         console.table(data)
     });
 
-    
+    jbApp.connection = connection
 });
 
 // this function is triggered by Journey Builder via Postmonger.
