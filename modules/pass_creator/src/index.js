@@ -213,7 +213,7 @@ const jbApp = {
         var currentStep = jbApp.getCurrentStep()
         if (jbApp.isLocalhost != true) {
             if (debug) console.log('Non Local Step: '+currentStep)
-            if(jbApp.getCurrentStep() == 0) {
+            if(currentStep == 0) {
                 if (debug) console.log('Connection Step: '+currentStep)
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: '+currentStep)
@@ -231,7 +231,7 @@ const jbApp = {
         var currentStep = jbApp.getCurrentStep()
         if (jbApp.isLocalhost == false) {
             if (debug) console.log('Non Local Step: '+currentStep)
-            if(jbApp.getCurrentStep() == 0) {
+            if(currentStep == 0) {
                 if (debug) console.log('Connection Step: '+currentStep)
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: '+currentStep)
