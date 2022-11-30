@@ -97,7 +97,7 @@ const jbApp = {
         }         
     },
     getCurrentStep:function(){
-        var stepSelector = '.steps-container li.active'
+        var stepSelector = '.steps li.active'
         var stepCounter = $(stepSelector).data('step-index')
         if (stepCounter > 0){
             console.log('Currently on step: '+stepCounter)
@@ -120,7 +120,7 @@ const jbApp = {
         }
         return returnArray
     },
-    setMenu:function(connection){
+    processAction:function(connection){
         if (debug) console.log('Preparing menu')
         $('.pass_action').on('click',function( elem ) {
             var id = $( this ).prop('id')            
@@ -193,7 +193,7 @@ const jbApp = {
                 && jbApp.pageHtml != undefined
                 && jbApp.pageHtml.length
                 ){
-                $('#main').html(jbApp.pageHtml);         
+                $('#main').html(jbApp.pageHtml);     
 
                 /**
                  * After updating, enhance html if needed
@@ -201,12 +201,92 @@ const jbApp = {
                 if (action == 'selectMessage'){
                     jbApp.buildMessageOptions()
                 }   
-            }
+            }          
+    
+        }); 
+    },
+    bindMenu:function(connection){
+        if (debug) console.log('Preparing menu')
+        $('.pass_action').each(function() {
+            var id = $( this ).prop('id')            
+            if (debug) console.log('Button #'+ id + ": " + $( this ).text() );
             
             /**
-             * Rebind menu after page change
+             * Presume we'll be changing the page
              */
-            jbApp.setMenu(connection)           
+            var refeshPage=true;
+
+            /**
+             * Isolate the requested action
+             */
+            var action = $(this).data('action');
+            if (debug) console.log('Action to process: '+action)
+
+            /**
+             * Process the requested action
+             */
+            switch(action){
+
+                case 'showStep':
+                    // We don't want to destroy the input, only
+                    // to show a ribon containing the message
+                    // (included in subsequent function)
+                    refeshPage=false
+                    jbApp.getCurrentStep()
+                    break
+    
+                case 'inputMessage':     
+                    jbApp.inputMessageButtonAction()
+                    break;
+    
+                case 'selectMessage':
+                    jbApp.selectMessageButtonAction()
+                    break;
+    
+                case 'previewMessage':
+                    // We don't want to destroy the input, only
+                    // to show a ribon containing the message
+                    // (included in subsequent function)
+                    refeshPage=false
+
+                    jbApp.previewMessageButtonAction()
+                    break;
+    
+                case 'previewSelectMessage':
+                    // We don't want to destroy the input, only
+                    // to show a ribon containing the message
+                    // (included in subsequent function)
+                    refeshPage=false
+
+                    jbApp.previewSelectMessageButtonAction()
+                    break;
+                
+                case 'home':
+                    jbApp.homeButtonAction()
+                    break;
+    
+                default:
+                    jbApp.pageHtml = jbApp.getHtml('error')
+                    break;
+            }
+
+            /** 
+             * Process any page changes
+             */
+            if (refeshPage==true
+                &&jbApp.hasOwnProperty('pageHtml')
+                && jbApp.pageHtml != undefined
+                && jbApp.pageHtml.length
+                ){
+                $('#main').html(jbApp.pageHtml);     
+
+                /**
+                 * After updating, enhance html if needed
+                 */
+                if (action == 'selectMessage'){
+                    jbApp.buildMessageOptions()
+                }   
+            }          
     
         }); 
     },
@@ -535,7 +615,7 @@ const jbApp = {
         /**
          *  Setup 
          * */
-        jbApp.setMenu(connection)
+        jbApp.bindMenu(connection)
 
 
         // Announce ready
