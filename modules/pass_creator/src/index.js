@@ -124,8 +124,6 @@ const jbApp = {
         if (debug) console.log('Binding menu')
         $('.pass_action').each(function() {
             var elem = $( this )
-            //var id = $( this ).prop('id')            
-            //if (debug) console.log('Button #'+ id + ": " + $( this ).text() );
             
             /**
              * Presume we'll be changing the page
@@ -137,7 +135,6 @@ const jbApp = {
              */
             var action = $(this).data('action');
             jbApp.action = action
-            //if (debug) console.log('Action to process: '+action)
 
             /**
              * Bind the requested action
@@ -186,6 +183,7 @@ const jbApp = {
 
                         // Execute Action
                         jbApp.processPageChange(refreshPage)
+                        jbApp.buildMessageOptions()
                         
                         // Accounce Click
                         console.log('clicked selectMessage')
