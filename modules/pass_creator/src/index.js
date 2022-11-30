@@ -186,7 +186,7 @@ const jbApp = {
         jbApp.pageHtml = jbApp.getHtml('home')
         $('#home').text('Home').data('action','home')        
         jbApp.setProgress(0)
-        if (jbApp.isLocalhost == false) {
+        if (jbApp.isLocalhost != true) {
             //connection.trigger('updateSteps', jbApp.getSteps(1));            
             connection.trigger('prevStep')
             if (debug) console.log('Step: 1')
@@ -199,12 +199,15 @@ const jbApp = {
 
         $('#home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
-        if (jbApp.isLocalhost == false) {
-            if(jbApp.getCurrentStep() === 'select') {
+
+        if (jbApp.isLocalhost != true) {
+
+            if(jbApp.getCurrentStep() == '1') {
                 if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 2')
             }
+            
         }else{            
             if (debug) console.log('Local Step: 2')
         }
@@ -214,12 +217,15 @@ const jbApp = {
     
         $('#home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
+
         if (jbApp.isLocalhost == false) {
-            if(jbApp.getCurrentStep() === 'select') {
+
+            if(jbApp.getCurrentStep() == '1') {
                 if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 2')
             }
+
         }else{            
             if (debug) console.log('Local Step: 2')
         }
