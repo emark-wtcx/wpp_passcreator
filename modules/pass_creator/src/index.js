@@ -219,7 +219,7 @@ const jbApp = {
         jbApp.setProgress(33)
 
         if (jbApp.isLocalhost != true) {
-
+            if (debug) console.log('Non Local Step: 2')
             if(jbApp.getCurrentStep() == 1) {
                 if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
@@ -237,7 +237,7 @@ const jbApp = {
         jbApp.setProgress(33)
 
         if (jbApp.isLocalhost == false) {
-
+            if (debug) console.log('Non Local Step: 2')
             if(jbApp.getCurrentStep() == 1) {
                 if (debug) console.log('Connection Step: 2')
                 connection.trigger('nextStep')
