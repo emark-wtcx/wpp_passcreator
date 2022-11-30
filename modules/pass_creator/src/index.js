@@ -98,8 +98,14 @@ const jbApp = {
     },
     getCurrentStep:function(){
         var stepSelector = '.steps-container li.active'
-        var stepCounter = $(stepSelector).data('step-index')
-        return (stepCounter ? stepCounter : 0)
+        var stepCounter = parseInt($(stepSelector).data('step-index'))
+        if (stepCounter > 0){
+            console.log('Currently on step: '+stepCounter)
+            return stepCounter
+        }else{
+            console.log('First step from: '+stepCounter)
+            return 0
+        }
     },
     getSteps:function(activeStep){   
         var returnArray = []     
@@ -147,6 +153,7 @@ const jbApp = {
                 case 'previewMessage':
                     // We don't want to destroy the input, only
                     // to show a ribon containing the message
+                    // (included in subsequent function)
                     refeshPage=false
 
                     jbApp.previewMessageButtonAction()
@@ -155,6 +162,7 @@ const jbApp = {
                 case 'previewSelectMessage':
                     // We don't want to destroy the input, only
                     // to show a ribon containing the message
+                    // (included in subsequent function)
                     refeshPage=false
 
                     jbApp.previewSelectMessageButtonAction()
