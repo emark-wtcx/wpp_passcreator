@@ -105,7 +105,7 @@ const jbApp = {
                 selectedStep = elem.data('step-index')
             }
         })
-        return selectedStep++
+        return selectedStep
     },
     getSteps:function(activeStep){   
         var returnArray = []     
@@ -220,7 +220,7 @@ const jbApp = {
         let currentStep = jbApp.getCurrentStep()
         if (jbApp.isLocalhost != true) {
             if (debug) console.log('Non Local Step: '+currentStep)
-            if(jbApp.getCurrentStep() == 1) {
+            if(jbApp.getCurrentStep() == 0) {
                 if (debug) console.log('Connection Step: '+currentStep)
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: '+currentStep)
@@ -238,7 +238,7 @@ const jbApp = {
         let currentStep = jbApp.getCurrentStep()
         if (jbApp.isLocalhost == false) {
             if (debug) console.log('Non Local Step: '+currentStep)
-            if(jbApp.getCurrentStep() == 1) {
+            if(jbApp.getCurrentStep() == 0) {
                 if (debug) console.log('Connection Step: '+currentStep)
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: '+currentStep)
