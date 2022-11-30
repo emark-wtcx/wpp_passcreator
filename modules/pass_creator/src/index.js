@@ -97,15 +97,8 @@ const jbApp = {
         }         
     },
     getCurrentStep:function(){
-        var stepSelector = '.steps-container li'
-        var selectedStep = 0
-        $(stepSelector).each(function(){
-            let elem = $(this)
-            if (elem.hasClass('active')){
-                selectedStep = elem.data('step-index')
-            }
-        })
-        return selectedStep
+        var stepSelector = '.steps-container li.active'
+        return $(stepSelector).data('step-index')
     },
     getSteps:function(activeStep){   
         var returnArray = []     
