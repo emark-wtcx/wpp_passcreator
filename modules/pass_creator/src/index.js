@@ -98,7 +98,8 @@ const jbApp = {
     },
     getCurrentStep:function(){
         var stepSelector = '.steps-container li.active'
-        var stepCounter = parseInt($(stepSelector).eq(0).attr('data-step-index'))
+        var stepCounter = $(stepSelector).eq(0).attr('data-step-index')
+        console.log('Raw step: '+stepCounter)        
         if (stepCounter > 0){
             console.log('Currently on step: '+stepCounter)
             return stepCounter
