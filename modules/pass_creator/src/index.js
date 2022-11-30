@@ -217,13 +217,13 @@ const jbApp = {
 
         $('#home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
-
+        let currentStep = jbApp.getCurrentStep()
         if (jbApp.isLocalhost != true) {
-            if (debug) console.log('Non Local Step: 2')
+            if (debug) console.log('Non Local Step: '+currentStep)
             if(jbApp.getCurrentStep() == 1) {
-                if (debug) console.log('Connection Step: 2')
+                if (debug) console.log('Connection Step: '+currentStep)
                 connection.trigger('nextStep')
-                if (debug) console.log('Step: 2')
+                if (debug) console.log('Step: '+currentStep)
             }
             
         }else{            
@@ -235,17 +235,17 @@ const jbApp = {
     
         $('#home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
-
+        let currentStep = jbApp.getCurrentStep()
         if (jbApp.isLocalhost == false) {
-            if (debug) console.log('Non Local Step: 2')
+            if (debug) console.log('Non Local Step: '+currentStep)
             if(jbApp.getCurrentStep() == 1) {
-                if (debug) console.log('Connection Step: 2')
+                if (debug) console.log('Connection Step: '+currentStep)
                 connection.trigger('nextStep')
-                if (debug) console.log('Step: 2')
+                if (debug) console.log('Step: '+currentStep)
             }
 
         }else{            
-            if (debug) console.log('Local Step: 2')
+            if (debug) console.log('Local Step: '+currentStep)
         }
     },
     previewMessageButtonAction:function(){
