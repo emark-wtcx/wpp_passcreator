@@ -130,98 +130,134 @@ const jbApp = {
             /**
              * Presume we'll be changing the page
              */
-            var refeshPage=true;
+            var refreshPage=true;
 
             /**
              * Isolate the required action
              */
             var action = $(this).data('action');
+            jbApp.action = action
             //if (debug) console.log('Action to process: '+action)
 
             /**
              * Bind the requested action
              */
-            switch(action){
+            switch(jbApp.action){
 
                 case 'showStep':
                     $(elem).on('click',function(){
-                        // We don't want to destroy the input, only
-                        // to show a ribon containing the message
-                        // (included in subsequent function)
-                        refeshPage=false   
+                        // No page refresh required
+                        refreshPage=false   
+                        
+                        // Prepare action changes
                         jbApp.getCurrentStep()
+
+                        // Execute Action
+                        jbApp.processPageChange(refreshPage)
+                        
+                        // Accounce Click
                         console.log('clicked showStep')
                     });                
                     if (debug) console.log('Bound '+action) 
-                    break
+                break
     
                 case 'inputMessage':
-                    $(elem).on('click',function(){     
+                    $(elem).on('click',function(){  
+                        // Prepare action changes
                         jbApp.inputMessageButtonAction()
+
+                        // Execute Action
+                        jbApp.processPageChange(refreshPage)
+                        
+                        // Accounce Click
                         console.log('clicked inputMessage')
+                        /**
+                         * Bind dynamic elements
+                         */
+                        jbApp.bindMenu(connection)
                         })
                     if (debug) console.log('Bound '+action)
-                    break;
+                break;
     
                 case 'selectMessage':
                     $(elem).on('click',function(){
+                        // Prepare action changes
                         jbApp.selectMessageButtonAction()
+
+                        // Execute Action
+                        jbApp.processPageChange(refreshPage)
+                        
+                        // Accounce Click
                         console.log('clicked selectMessage')
+                        /**
+                         * Bind dynamic elements
+                         */
+                        jbApp.bindMenu(connection)
                         })
                     if (debug) console.log('Bound '+action)
-                    break;
+                break;
     
                 case 'previewMessage':
                     $(elem).on('click',function(){
-                        // We don't want to destroy the input, only
-                        // to show a ribon containing the message
-                        // (included in subsequent function)
-                        refeshPage=false
+                        // No page refresh required
 
+                        refreshPage=false
+
+                        // Prepare action changes                        
                         jbApp.previewMessageButtonAction()
+                        
+                        // Execute Action
+                        jbApp.processPageChange(refreshPage)
                     });
                     if (debug) console.log('Bound '+action)
-                    break;
+                break;
     
                 case 'previewSelectMessage':
                     $(elem).on('click',function(){
-                        // We don't want to destroy the input, only
-                        // to show a ribon containing the message
-                        // (included in subsequent function)
-                        refeshPage=false
-
+                        // No page refresh required
+                        refreshPage=false
+                        
+                        // Prepare action changes
                         jbApp.previewSelectMessageButtonAction()
+                        
+                        // Execute Action
+                        jbApp.processPageChange(refreshPage)
                     });
                     if (debug) console.log('Bound '+action)
-                    break;
+                break;
                 
                 case 'home':
                     $(elem).on('click',function(){
+                        // Prepare action changes
                         jbApp.homeButtonAction()
+                        
+                        // Execute Action
+                        jbApp.processPageChange(refreshPage)
                         })
                     if (debug) console.log('Bound '+action)
-                    break;
-            }
-
-            /** 
-             * Process any page changes
-             */
-            if (refeshPage==true
-                &&jbApp.hasOwnProperty('pageHtml')
-                && jbApp.pageHtml != undefined
-                && jbApp.pageHtml.length
-                ){
-                $('#main').html(jbApp.pageHtml);  
-
-                /**
-                 * After updating, enhance html if needed
-                 */
-                if (action == 'selectMessage'){
-                    jbApp.buildMessageOptions()
-                }   
-            }          
+                break;
+            }   
     
         }); 
+    },
+    processPageChange(refreshPage){
+        /** 
+         * Process any page changes
+         */
+        if (refreshPage==true
+        &&jbApp.hasOwnProperty('pageHtml')
+        && jbApp.pageHtml != undefined
+        && jbApp.pageHtml.length
+        ){
+        $('#main').html(jbApp.pageHtml);     
+
+        /**
+         * After updating, enhance html if needed
+         */
+        if (jbApp.action == 'selectMessage'){
+            jbApp.buildMessageOptions()
+        }   
+    }        
     },
     homeButtonAction:function(){
         jbApp.pageHtml = jbApp.getHtml('home')
