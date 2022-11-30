@@ -713,7 +713,8 @@ function onInitActivity(payload) {
 
 function onDoneButtonClick() {              
     jbApp.payload["metaData"].isConfigured = true; 
-    jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
+    //jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
+    jbApp.payload.arguments.execute.inArguments = [{"message": previewMessage}]
     connection.trigger('updateActivity', jbApp.payload);
 
     /* Original code below
