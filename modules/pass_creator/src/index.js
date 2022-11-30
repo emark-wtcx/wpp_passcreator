@@ -120,96 +120,12 @@ const jbApp = {
         }
         return returnArray
     },
-    processAction:function(connection){
-        if (debug) console.log('Preparing menu')
-        $('.pass_action').on('click',function( elem ) {
-            var id = $( this ).prop('id')            
-            if (debug) console.log('Button #'+ id + ": " + $( this ).text() );
-            
-            /**
-             * Presume we'll be changing the page
-             */
-            var refeshPage=true;
-
-            /**
-             * Isolate the requested action
-             */
-            var action = $(this).data('action');
-            if (debug) console.log('Action to process: '+action)
-
-            /**
-             * Process the requested action
-             */
-            switch(action){
-
-                case 'showStep':
-                    // We don't want to destroy the input, only
-                    // to show a ribon containing the message
-                    // (included in subsequent function)
-                    refeshPage=false
-                    jbApp.getCurrentStep()
-                    break
-    
-                case 'inputMessage':     
-                    jbApp.inputMessageButtonAction()
-                    break;
-    
-                case 'selectMessage':
-                    jbApp.selectMessageButtonAction()
-                    break;
-    
-                case 'previewMessage':
-                    // We don't want to destroy the input, only
-                    // to show a ribon containing the message
-                    // (included in subsequent function)
-                    refeshPage=false
-
-                    jbApp.previewMessageButtonAction()
-                    break;
-    
-                case 'previewSelectMessage':
-                    // We don't want to destroy the input, only
-                    // to show a ribon containing the message
-                    // (included in subsequent function)
-                    refeshPage=false
-
-                    jbApp.previewSelectMessageButtonAction()
-                    break;
-                
-                case 'home':
-                    jbApp.homeButtonAction()
-                    break;
-    
-                default:
-                    jbApp.pageHtml = jbApp.getHtml('error')
-                    break;
-            }
-
-            /** 
-             * Process any page changes
-             */
-            if (refeshPage==true
-                &&jbApp.hasOwnProperty('pageHtml')
-                && jbApp.pageHtml != undefined
-                && jbApp.pageHtml.length
-                ){
-                $('#main').html(jbApp.pageHtml);     
-
-                /**
-                 * After updating, enhance html if needed
-                 */
-                if (action == 'selectMessage'){
-                    jbApp.buildMessageOptions()
-                }   
-            }          
-    
-        }); 
-    },
     bindMenu:function(connection){
-        if (debug) console.log('Preparing menu')
+        if (debug) console.log('Binding menu')
         $('.pass_action').each(function() {
-            var id = $( this ).prop('id')            
-            if (debug) console.log('Button #'+ id + ": " + $( this ).text() );
+            var elem = $( this )
+            //var id = $( this ).prop('id')            
+            //if (debug) console.log('Button #'+ id + ": " + $( this ).text() );
             
             /**
              * Presume we'll be changing the page
@@ -217,56 +133,73 @@ const jbApp = {
             var refeshPage=true;
 
             /**
-             * Isolate the requested action
+             * Isolate the required action
              */
             var action = $(this).data('action');
-            if (debug) console.log('Action to process: '+action)
+            //if (debug) console.log('Action to process: '+action)
 
             /**
-             * Process the requested action
+             * Bind the requested action
              */
             switch(action){
 
                 case 'showStep':
-                    // We don't want to destroy the input, only
-                    // to show a ribon containing the message
-                    // (included in subsequent function)
-                    refeshPage=false
-                    jbApp.getCurrentStep()
+                    $(elem).on('click',function(){
+                        // We don't want to destroy the input, only
+                        // to show a ribon containing the message
+                        // (included in subsequent function)
+                        refeshPage=false   
+                        jbApp.getCurrentStep()
+                        console.log('clicked showStep')
+                    });                
+                    if (debug) console.log('Bound '+action) 
                     break
     
-                case 'inputMessage':     
-                    jbApp.inputMessageButtonAction()
+                case 'inputMessage':
+                    $(elem).on('click',function(){     
+                        jbApp.inputMessageButtonAction()
+                        console.log('clicked inputMessage')
+                        })
+                    if (debug) console.log('Bound '+action)
                     break;
     
                 case 'selectMessage':
-                    jbApp.selectMessageButtonAction()
+                    $(elem).on('click',function(){
+                        jbApp.selectMessageButtonAction()
+                        console.log('clicked selectMessage')
+                        })
+                    if (debug) console.log('Bound '+action)
                     break;
     
                 case 'previewMessage':
-                    // We don't want to destroy the input, only
-                    // to show a ribon containing the message
-                    // (included in subsequent function)
-                    refeshPage=false
+                    $(elem).on('click',function(){
+                        // We don't want to destroy the input, only
+                        // to show a ribon containing the message
+                        // (included in subsequent function)
+                        refeshPage=false
 
-                    jbApp.previewMessageButtonAction()
+                        jbApp.previewMessageButtonAction()
+                    });
+                    if (debug) console.log('Bound '+action)
                     break;
     
                 case 'previewSelectMessage':
-                    // We don't want to destroy the input, only
-                    // to show a ribon containing the message
-                    // (included in subsequent function)
-                    refeshPage=false
+                    $(elem).on('click',function(){
+                        // We don't want to destroy the input, only
+                        // to show a ribon containing the message
+                        // (included in subsequent function)
+                        refeshPage=false
 
-                    jbApp.previewSelectMessageButtonAction()
+                        jbApp.previewSelectMessageButtonAction()
+                    });
+                    if (debug) console.log('Bound '+action)
                     break;
                 
                 case 'home':
-                    jbApp.homeButtonAction()
-                    break;
-    
-                default:
-                    jbApp.pageHtml = jbApp.getHtml('error')
+                    $(elem).on('click',function(){
+                        jbApp.homeButtonAction()
+                        })
+                    if (debug) console.log('Bound '+action)
                     break;
             }
 
@@ -278,7 +211,7 @@ const jbApp = {
                 && jbApp.pageHtml != undefined
                 && jbApp.pageHtml.length
                 ){
-                $('#main').html(jbApp.pageHtml);     
+                $('#main').html(jbApp.pageHtml);  
 
                 /**
                  * After updating, enhance html if needed
