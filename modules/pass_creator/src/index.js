@@ -194,7 +194,6 @@ const jbApp = {
                         /**
                          * Bind dynamic elements
                          */
-                        jbApp.bindMenu(connection)
                         })
                     if (debug) console.log('Bound '+action)
                 break;
@@ -213,7 +212,6 @@ const jbApp = {
                         /**
                          * Bind dynamic elements
                          */
-                        jbApp.bindMenu(connection)
                         })
                     if (debug) console.log('Bound '+action)
                 break;
@@ -405,6 +403,10 @@ const jbApp = {
             if (debug) console.log('Local Step: 3')
         }
     },
+    confirmMessage:function(){
+        jbApp.setUiControls()
+        jbApp.closeRibbon()
+    },
     setUiControls:function(){          
         if ($('#modal_message').html() != ''){    
             // Configured  
@@ -510,10 +512,6 @@ const jbApp = {
         if (debug) console.log('Placing selected message: '+previewMessage)
         $('#modal_message').html(previewMessage)
         
-        /**
-         * UI Controls
-         */        
-        jbApp.setUiControls()
     },
     getMessageOptions:function(){
         if (!jbApp.isLocalhost){
@@ -632,7 +630,7 @@ const jbApp = {
                     </div>
                 </div><br />
                 <div class="slds-col slds-size_3-of-3">
-                    <button id="button1" data-action="previewMessage" class="slds-button slds-button_brand pass_action">Select Message</button>
+                    <button id="button1" data-action="previewMessage" onClick="jbApp.previewMessageButtonAction()" class="slds-button slds-button_brand pass_action">Select Message</button>
                 </div>
             </div>
             `,
@@ -651,19 +649,7 @@ const jbApp = {
                     </div>
                 </div><br />
                 <div class="slds-col slds-size_3-of-3">
-                    <button id="button1" data-action="previewSelectMessage" class="slds-button slds-button_brand pass_action">Select Message</button>
-                </div>
-            </div>
-            `,
-            previewMessage:`
-                <div id="passcreator">
-                <h1>Pass Creator - WPP</h1>
-                <p>Here's what your message will look like</p>
-                <div class="slds-form-element">
-                    <label class="slds-form-element__label" for="textarea-id-01">Textarea Label</label>
-                    <div class="slds-form-element__control">
-                        <textarea id="pass_message" placeholder="Placeholder text…" class="slds-textarea" readonly></textarea>
-                    </div>
+                    <button id="button1" data-action="previewSelectMessage" onClick="jbApp.previewSelectMessageButtonAction()" class="slds-button slds-button_brand pass_action">Select Message</button>
                 </div>
             </div>
             `,
@@ -677,6 +663,10 @@ const jbApp = {
                 </span>
                 <div class="slds-notify__content">
                     <h2 class="slds-text-heading_small " id="modal_message"></h2>
+                    <br />
+                    <button onClick="jbApp.confirmMessage()" id="confirmSetup" class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+                    Use message
+                    </button>
                 </div>
                 <div class="slds-notify__close">
                     <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
@@ -686,10 +676,7 @@ const jbApp = {
                     <span class="slds-assistive-text">Close</span>
                     </button>
                 </div>
-                    <br />
-                    <button onClick="jbApp.setUiControls()" id="confirmSetup" class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
-                    Use message
-                    </button
+                    
                 </div>
             </div>
             `        
