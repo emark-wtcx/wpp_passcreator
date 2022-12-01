@@ -376,6 +376,7 @@ const jbApp = {
             var blockDisplay = 'visible'
         }    
         if (debug) console.log('blockDisplay: '+blockDisplay)
+
         if (blockDisplay == 'none'){  
             // Show ribbon
             var ribbon = jbApp.getHtml('ribbon')
@@ -470,11 +471,7 @@ const jbApp = {
          */
         if (debug) console.log('Placing message: '+previewMessage)
         $('#modal_message').html(previewMessage)
-
-        /**
-         * UI Controls
-         */        
-        jbApp.setUiControls()
+        jbApp.message = previewMessage
     },
     selectMessage:function(){
         /**
@@ -514,7 +511,7 @@ const jbApp = {
          */
         if (debug) console.log('Placing selected message: '+previewMessage)
         $('#modal_message').html(previewMessage)
-        
+        jbApp.message = previewMessage
     },
     getMessageOptions:function(){
         if (!jbApp.isLocalhost){
@@ -794,7 +791,7 @@ function onInitActivity(payload) {
 function onDoneButtonClick() {              
     jbApp.payload["metaData"].isConfigured = true; 
     //jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
-    jbApp.payload.arguments.execute.inArguments = [{"message": previewMessage}]
+    jbApp.payload.arguments.execute.inArguments = [{"message": jbApp.message}]
     connection.trigger('updateActivity', jbApp.payload);
 
     /* Original code below
