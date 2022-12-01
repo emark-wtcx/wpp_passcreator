@@ -108,7 +108,7 @@ const jbApp = {
          */
         var stepCounter = $(stepSelector).attr('data-step-index')
         var stepCounter2 = $(stepSelector).prop('data-step-index')
-        var stepCounter2 = $(stepSelector).data('step-index')
+        var stepCounter3 = $(stepSelector).data('step-index')
         console.log('Raw step: '+stepCounter)  
         console.log('Raw step2: '+stepCounter2)  
         console.log('Raw step3: '+stepCounter3)  
@@ -684,6 +684,10 @@ const jbApp = {
                     <span class="slds-assistive-text">Close</span>
                     </button>
                 </div>
+                    <br />
+                    <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+                    Use message
+                    </button
                 </div>
             </div>
             `        
