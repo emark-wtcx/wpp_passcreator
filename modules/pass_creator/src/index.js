@@ -109,15 +109,18 @@ const jbApp = {
         var stepCounter = $(stepSelector).attr('data-step-index')
         var stepCounter2 = $(stepSelector).prop('data-step-index')
         var stepCounter3 = $(stepSelector).data('step-index')
-        console.log('Raw step: '+stepCounter)  
-        console.log('Raw step2: '+stepCounter2)  
-        console.log('Raw step3: '+stepCounter3)  
+        console.log('Attr step: '+stepCounter)  
+        console.log('Prop step2: '+stepCounter2)  
+        console.log('Data step3: '+stepCounter3)  
         
         /**
          * Test conversion to INT
          */
-        var intCounter = parseInt(stepCounter)
-        console.log('Int step: '+intCounter)          
+        if (stepCounter != undefined
+            && stepCounter != 'undefined'){
+            var intCounter = parseInt(stepCounter)
+            console.log('Int step: '+intCounter)          
+            }
         
         /**
          * Return result
