@@ -97,8 +97,8 @@ const jbApp = {
         }         
     },
     getCurrentStep:function(){
-        var stepSelector = '.steps-container li.active'
-        var stepCounter = $(stepSelector).eq(0).prop('data-step-index')
+        var stepSelector = '.steps-container'
+        var stepCounter = $(stepSelector).find('li.active').prop('data-step-index')
         console.log('Raw step: '+stepCounter)    
         var intCounter = parseInt(stepCounter)
         console.log('Int step: '+intCounter)    
