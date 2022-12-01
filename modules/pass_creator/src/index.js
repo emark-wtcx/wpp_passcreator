@@ -363,7 +363,6 @@ const jbApp = {
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 3')
                 }
-            jbApp.setUiControls()
         }else{            
             if (debug) console.log('Local Step: 3')
         }
@@ -402,7 +401,6 @@ const jbApp = {
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 3')
                 }
-            jbApp.setUiControls()
         }else{            
             if (debug) console.log('Local Step: 3')
         }
@@ -616,6 +614,13 @@ const jbApp = {
     },
     
     getHtml:function(page){
+        if (page==null 
+            || page==undefined 
+            || page=='' 
+            || page.toString().length<1
+            ){
+            page = 'error'
+        }
         var html = {
             home:'<h1>Choose Activity</h1>',
             error:'<h1>An error occurred</h1>',
@@ -665,7 +670,7 @@ const jbApp = {
                     <h2 class="slds-text-heading_small " id="modal_message"></h2>
                     <br />
                     <button onClick="jbApp.confirmMessage()" id="confirmSetup" class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
-                    Use message
+                    -> Click here to use this message <-
                     </button>
                 </div>
                 <div class="slds-notify__close">
