@@ -97,11 +97,27 @@ const jbApp = {
         }         
     },
     getCurrentStep:function(){
-        var stepSelector = '.steps-container li.active'
+        /**
+         * Define selector 
+         */
+        var stepSelector = 'div.steps-container > ul > li.active'
+        console.log('stepSelector: '+stepSelector)
+        
+        /**
+         * Get value 
+         */
         var stepCounter = $(stepSelector).attr('data-step-index')
-        console.log('Raw step: '+stepCounter)    
+        console.log('Raw step: '+stepCounter)  
+        
+        /**
+         * Test conversion to INT
+         */
         var intCounter = parseInt(stepCounter)
-        console.log('Int step: '+intCounter)    
+        console.log('Int step: '+intCounter)          
+        
+        /**
+         * Return result
+         */  
         if (stepCounter > 0){
             console.log('Currently on step: '+stepCounter)
             return stepCounter
