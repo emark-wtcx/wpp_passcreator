@@ -107,7 +107,11 @@ const jbApp = {
          * Get value 
          */
         var stepCounter = $(stepSelector).attr('data-step-index')
+        var stepCounter2 = $(stepSelector).prop('data-step-index')
+        var stepCounter2 = $(stepSelector).data('step-index')
         console.log('Raw step: '+stepCounter)  
+        console.log('Raw step2: '+stepCounter2)  
+        console.log('Raw step3: '+stepCounter3)  
         
         /**
          * Test conversion to INT
@@ -332,7 +336,7 @@ const jbApp = {
         //TODO: Clean up this "block display" routine
         var blockDisplay = 'none'
         if ($('#notification_ribbon').length>0){
-            var blockDisplay = 'shown'
+            var blockDisplay = 'visible'
         }    
         if (debug) console.log('blockDisplay: '+blockDisplay)
         if (blockDisplay == 'none'){  
@@ -367,7 +371,7 @@ const jbApp = {
 
         var blockDisplay = 'none'
         if ($('#notification_ribbon').length>0){
-            var blockDisplay = 'shown'
+            var blockDisplay = 'visible'
         }    
         if (debug) console.log('blockDisplay: '+blockDisplay)
         if (blockDisplay == 'none'){  
@@ -391,7 +395,7 @@ const jbApp = {
 
         // Message Selected - Move onto next step
         if (jbApp.isLocalhost == false) {                        
-            if(jbApp.getCurrentStep() === 'configure') {
+            if(jbApp.getCurrentStep() === 1) {
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 3')
                 }
