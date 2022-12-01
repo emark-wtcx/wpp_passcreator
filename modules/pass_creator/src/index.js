@@ -358,10 +358,11 @@ const jbApp = {
         
         // Message Selected - Move onto next step
         if (jbApp.isLocalhost == false) {                        
-            if(jbApp.getCurrentStep() === 'configure') {
+            if(jbApp.getCurrentStep() === 1) {
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 3')
                 }
+            jbApp.setUiControls()
         }else{            
             if (debug) console.log('Local Step: 3')
         }
@@ -399,6 +400,7 @@ const jbApp = {
                 connection.trigger('nextStep')
                 if (debug) console.log('Step: 3')
                 }
+            jbApp.setUiControls()
         }else{            
             if (debug) console.log('Local Step: 3')
         }
