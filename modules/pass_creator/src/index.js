@@ -291,8 +291,9 @@ const jbApp = {
     inputMessageButtonAction:function(){   
         jbApp.html = jbApp.getHtml('inputMessage')
 
-        $('#home').html('Cancel').data('action','home')
+        $('#jbapp__nav_home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
+
         var currentStep = jbApp.getCurrentStep()
         if (debug) console.log('currentStep: '+currentStep)
         if (jbApp.isLocalhost != true) {
@@ -310,8 +311,9 @@ const jbApp = {
     selectMessageButtonAction:function(){        
         jbApp.html = jbApp.getHtml('selectMessage')
     
-        $('#home').html('Cancel').data('action','home')
+        $('#jbapp__nav_home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
+
         var currentStep = jbApp.getCurrentStep()
         if (debug) console.log('currentStep: '+currentStep)
         if (jbApp.isLocalhost == false) {
