@@ -687,7 +687,7 @@ const jbApp = {
                     </button>
                 </div>
                     <br />
-                    <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
+                    <button onClick="jbApp.setUiControls()" id="confirmSetup" class="slds-button slds-button_icon slds-button_icon-inverse" title="Close">
                     Use message
                     </button
                 </div>
