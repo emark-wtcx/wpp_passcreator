@@ -278,7 +278,7 @@ const jbApp = {
     },
     homeButtonAction:function(){
         jbApp.pageHtml = jbApp.getHtml('home')
-        $('#home').text('Home').data('action','home')        
+        $('#jbapp__nav_home').text('Home').data('action','home')        
         jbApp.setProgress(0)
         if (jbApp.isLocalhost != true) {
             //connection.trigger('updateSteps', jbApp.getSteps(1));            
