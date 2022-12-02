@@ -46,9 +46,15 @@ module.exports = function configJSON(req) {
       }
     },
     configurationArguments: {
-      publish: {},
-      validate: {},
-      stop: {}
+      publish: {
+        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
+      },
+      validate: {
+        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
+      },
+      stop: {
+        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
+      }
     },
     wizardSteps: [
       {
