@@ -810,30 +810,6 @@ function onDoneButtonClick() {
         {"message": jbApp.message}
     ]
     connection.trigger('updateActivity', jbApp.payload);
-
-    /* Original code below
-    // we set must metaData.isConfigured in order to tell JB that
-    // this activity is ready for activation
-    activity.metaData.isConfigured = true;
-
-    // get the option that the user selected and save it to
-    const select = document.getElementById('pass_creator');
-    const option = select.options[select.selectedIndex];
-
-    activity.arguments.execute.inArguments = [{
-        discount: option.value,
-    }];
-
-    // you can set the name that appears below the activity with the name property
-    activity.name = `Issue ${activity.arguments.execute.inArguments[0].discount}% Code`;
-
-    console.log('------------ triggering:updateActivity({obj}) ----------------');
-    console.log('Sending message back to updateActivity');
-    console.log('saving\n', JSON.stringify(activity, null, 4));
-    console.log('--------------------------------------------------------------');
-
-    connection.trigger('updateActivity', activity);
-    */
 }
 
 function onCancelButtonClick() {
