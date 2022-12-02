@@ -459,7 +459,9 @@ const jbApp = {
         /**
          * Check we have the data to parse 
          */
-        if (jbApp.hasOwnProperty('subscriber') && previewMessage != undefined){
+        if (jbApp.hasOwnProperty('system') 
+        && jbApp.system.hasOwnProperty('subscriber')
+        && previewMessage != undefined){
             if (debug) console.log('Checking data: '+JSON.stringify(jbApp.system.subscriber))
             
             /**
