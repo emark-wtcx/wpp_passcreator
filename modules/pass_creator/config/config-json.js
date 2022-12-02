@@ -4,7 +4,9 @@ module.exports = function configJSON(req) {
     metaData: {
       // the location of our icon file
       icon: `images/pass_creator.png`,
-      category: 'messages'
+      category: 'messages',
+      isConfigured:false,
+      configOnDrop:true
     },
     // For Custom Activity this must say, "REST"
     type: 'REST',
@@ -79,13 +81,7 @@ module.exports = function configJSON(req) {
               access: 'visible'
             },
           }],
-          outArguments: [{
-            message: {
-              dataType: 'Text',
-              direction: 'out',
-              access: 'visible'
-            },
-          }]
+          outArguments: []
         }
       }
     }

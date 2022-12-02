@@ -809,7 +809,7 @@ function onDoneButtonClick() {
 
     // Place body in outgoing call
     jbApp.payload.arguments.execute.body = [restBody]
-    jbApp.payload.arguments.execute.outArguments = [restBody]
+    jbApp.payload.arguments.execute.inArguments = [restBody]
 
     // let journey builder know the activity has changes
     connection.trigger('setActivityDirtyState', true);
