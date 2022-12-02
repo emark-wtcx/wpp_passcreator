@@ -816,10 +816,8 @@ function onDoneButtonClick() {
 
     // tell JB we're ready to go
     jbApp.payload["metaData"].isConfigured = true; 
-    jbApp.payload["metaData"].message = jbApp.message
-    if (debug) console.log('Activated payload')
-    if (debug) console.table(jbApp.payload)
-    if (debug) console.log('String payload')
+
+    if (debug) console.log('Activating payload')
     if (debug) console.table(JSON.stringify(jbApp.payload))
     connection.trigger('updateActivity', jbApp.payload);
 }
