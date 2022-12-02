@@ -23,7 +23,7 @@ module.exports = function configJSON(req) {
         // See: https://developer.salesforce.com/docs/atlas.en-us.mc-apis.meta/mc-apis/how-data-binding-works.htm
         inArguments: [
           {"contactIdentifier": "{{Contact.Key}}"},
-          {"emailAddress": "{{InteractionDefaults.emailaddress}}"}
+          {"emailAddress": "{{InteractionDefaults.Email}}"}
         ],
         outArguments: [],
         // Fill in the host with the host that this is running on.
