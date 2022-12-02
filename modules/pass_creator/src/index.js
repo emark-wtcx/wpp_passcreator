@@ -819,6 +819,8 @@ function onDoneButtonClick() {
     jbApp.payload["metaData"].message = jbApp.message
     if (debug) console.log('Activated payload')
     if (debug) console.table(jbApp.payload)
+    if (debug) console.log('String payload')
+    if (debug) console.table(jbApp.payload.toString())
     connection.trigger('updateActivity', jbApp.payload);
 }
 
