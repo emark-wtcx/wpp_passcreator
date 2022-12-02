@@ -1,7 +1,12 @@
 /**
- * Communication layer
+ * Import Communication layer
  */
 import Postmonger from 'postmonger';
+
+/**
+* Create a new connection for this session.
+*/
+const connection = new Postmonger.Session();
 
 /**
  * Show Console Output?
@@ -696,11 +701,6 @@ const jbApp = {
     },
 }
 
-// Create a new connection for this session.
-// We use this connection to talk to Journey Builder. You'll want to keep this
-// reference handy and pass it into your UI framework if you're using React, Angular, Vue, etc.
-const connection = new Postmonger.Session();
-
 // we'll store the activity on this variable when we receive it
 let activity = null;
 
@@ -816,6 +816,8 @@ function onDoneButtonClick() {
 
     // tell JB we're ready to go
     jbApp.payload["metaData"].isConfigured = true; 
+    if (debug) console.log('Activated payload')
+    if (debug) console.table(jbApp.payload)
     connection.trigger('updateActivity', jbApp.payload);
 }
 
