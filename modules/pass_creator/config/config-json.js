@@ -26,7 +26,7 @@ module.exports = function configJSON(req) {
             "contactIdentifier": "{{Contact.Key}}"
           },
           {
-            "emailAddress": "{{Event.emailaddress}}"
+            "emailAddress": "{{InteractionDefaults.Email}}"
           }
         ],
         outArguments: [],

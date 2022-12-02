@@ -604,7 +604,7 @@ const jbApp = {
             if (connection.hasOwnProperty('version')){
                 jbApp.Version = connection.version 
             }
-            connection.trigger('requestTokens');
+            if (jbApp.getTokens) connection.trigger('requestTokens');
         }        
 
         /**
@@ -806,7 +806,11 @@ function onInitActivity(payload) {
 function onDoneButtonClick() {              
     jbApp.payload["metaData"].isConfigured = true; 
     //jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
-    jbApp.payload.arguments.execute.inArguments = [{"message": jbApp.message}]
+    jbApp.payload.arguments.execute.inArguments = [
+        {"message": jbApp.message},
+        {"contactIdentifier": "{{Contact.Key}}"},
+        {"emailAddress": "{{InteractionDefaults.Email}}"}
+    ]
     connection.trigger('updateActivity', jbApp.payload);
 
     /* Original code below
