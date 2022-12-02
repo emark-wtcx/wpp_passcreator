@@ -805,8 +805,12 @@ function onInitActivity(payload) {
 
 function onDoneButtonClick() {              
     jbApp.payload["metaData"].isConfigured = true; 
-    //jbApp.payload.arguments.execute.inArguments.push('{"message": "'+jbApp.message+'"}')
-    jbApp.payload.arguments.execute.outArguments = [{"message": jbApp.message}]
+    jbApp.payload.arguments.execute.inArguments = [{"message": jbApp.message}]
+    //jbApp.payload.arguments.execute.outArguments = [{"message": jbApp.message}]
+    // let journey builder know the activity has changes
+    connection.trigger('setActivityDirtyState', true);
+
+    // tell JB we're ready to go
     connection.trigger('updateActivity', jbApp.payload);
 }
 

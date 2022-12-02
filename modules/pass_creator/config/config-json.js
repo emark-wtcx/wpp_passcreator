@@ -77,7 +77,13 @@ module.exports = function configJSON(req) {
     schema: {
       arguments: {
         execute: {
-          inArguments: [],
+          inArguments: [{
+            message: {
+              dataType: 'Text',
+              direction: 'out',
+              access: 'visible'
+            },
+          }],
           outArguments: [{
             message: {
               dataType: 'Text',
