@@ -79,16 +79,11 @@ module.exports = function configJSON(req) {
         execute: {
           inArguments: [],
           outArguments: [{
-            discountCode: {
+            message: {
               dataType: 'Text',
               direction: 'out',
               access: 'visible'
             },
-            discount: {
-              dataType: 'Number',
-              direction: 'out',
-              access: 'visible'
-            }
           }]
         }
       }
