@@ -13,6 +13,9 @@ const debug = true;
  */
 const jbApp = {  
     isLocalhost:(location.hostname === 'localhost' || location.hostname === '127.0.0.1'),
+    getSchema:true,
+    getInteractions:false,
+    getTokens:false,
     system:{
         subscriber:{
             'firstname':'{{Contact.Default.FirstName}}',
@@ -416,8 +419,7 @@ const jbApp = {
                 // Production         
                 connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
                 if (debug) console.log('Enabled production button')
-                $('#done').text('Done').prop('disabled',false)
-                //jbApp.connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
+                $('#done').text('Done').prop('disabled',false)                
             }else{   
                 // Development        
                 $('#done').text('Done').prop('disabled',false)   
@@ -429,8 +431,7 @@ const jbApp = {
                 // Production        
                 connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:false });
                 if (debug) console.log('Disabled production button')  
-                $('#done').text('Done').prop('disabled',true)
-                jbApp.connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:false });
+                $('#done').text('Done').prop('disabled',true)                
             }else{   
                 // Development      
                 $('#done').text('Done').prop('disabled',true)   
@@ -725,31 +726,36 @@ document.addEventListener('DOMContentLoaded', function main() {
     // Tell the parent iFrame that we are ready.
     connection.trigger('ready');
 
-    connection.trigger('requestTokens');
-    connection.on('requestedTokens', function (data) {
-        // save schema
-        console.log('*** Data ***', JSON.stringify(data));
-        console.log('*** Tokens ***', JSON.stringify(data['token']));
-        jbApp.token = data['token']
-     });
+    if (jbApp.getTokens){
+        connection.trigger('requestTokens');
+        connection.on('requestedTokens', function (data) {
+            // save tokens
+            console.log('*** Data ***', JSON.stringify(data));
+            console.log('*** Tokens ***', JSON.stringify(data['token']));
+            jbApp.token = data['token']
+        });
+        }
+    
+    if (jbApp.getSchema){
+        connection.trigger('requestSchema');
+        connection.on('requestedSchema', function (data) {
+            // save schema
+            console.log('*** Schema ***', JSON.stringify(data['schema']));
+            jbApp.schema = data['schema']
+            jbApp.parseSchema()
+            });
+    }
+    
+    
+    if (jbApp.getInteractions){
+        connection.trigger('requestInteraction');
+        connection.on('requestedInteractions', function (data) {
+            console.log('Requested Interaction:')
+            console.table(data)
+        });
+    }
     console.log('connection:')
     console.table(connection)
-
-    connection.trigger('requestSchema');
-    connection.on('requestedSchema', function (data) {
-        // save schema
-        console.log('*** Schema ***', JSON.stringify(data['schema']));
-        jbApp.schema = data['schema']
-        jbApp.parseSchema()
-     });
-
-     
-    connection.trigger('requestInteraction');
-    connection.on('requestedInteractions', function (data) {
-        console.log('Requested Interaction:')
-        console.table(data)
-    });
-
     jbApp.connection = connection
 });
 
