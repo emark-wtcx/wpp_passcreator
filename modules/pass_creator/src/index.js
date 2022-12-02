@@ -806,10 +806,8 @@ function onInitActivity(payload) {
 function onDoneButtonClick() {              
     jbApp.payload["metaData"].isConfigured = true; 
     //jbApp.payload.arguments.execute.inArguments.push('{"message": "'+previewMessage+'"}')
-    jbApp.payload.arguments.execute.inArguments = [
-        {"message": jbApp.message},
-        {"contactIdentifier": "{{Contact.Key}}"},
-        {"emailAddress": "{{InteractionDefaults.emailaddress}}"}
+    jbApp.payload.arguments.execute.outArguments = [
+        {"message": jbApp.message}
     ]
     connection.trigger('updateActivity', jbApp.payload);
 
