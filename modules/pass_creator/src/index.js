@@ -809,7 +809,7 @@ function onDoneButtonClick() {
     jbApp.payload.arguments.execute.inArguments = [
         {"message": jbApp.message},
         {"contactIdentifier": "{{Contact.Key}}"},
-        {"emailAddress": "{{InteractionDefaults.Email}}"}
+        {"emailAddress": "{{InteractionDefaults.emailaddress}}"}
     ]
     connection.trigger('updateActivity', jbApp.payload);
 
