@@ -820,7 +820,7 @@ function onDoneButtonClick() {
     if (debug) console.log('Activated payload')
     if (debug) console.table(jbApp.payload)
     if (debug) console.log('String payload')
-    if (debug) console.table(jbApp.payload.toString())
+    if (debug) console.table(JSON.stringify(jbApp.payload))
     connection.trigger('updateActivity', jbApp.payload);
 }
 
