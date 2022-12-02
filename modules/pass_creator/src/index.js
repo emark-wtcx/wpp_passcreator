@@ -416,8 +416,8 @@ const jbApp = {
                 // Production         
                 connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
                 if (debug) console.log('Enabled production button')
-                $('#done').text('Done').prop('disabled',true)
-                jbApp.connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
+                $('#done').text('Done').prop('disabled',false)
+                //jbApp.connection.trigger('updateButton', { button: 'done', text: 'done', visible: true, enabled:true }); 
             }else{   
                 // Development        
                 $('#done').text('Done').prop('disabled',false)   
