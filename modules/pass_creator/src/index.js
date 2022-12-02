@@ -810,7 +810,7 @@ function onDoneButtonClick() {
     let restBody = {"message": jbApp.message}
 
     // Place body in outgoing call
-    jbApp.payload.arguments.execute.body = [restBody]
+    jbApp.payload.arguments.body = [restBody]
     jbApp.payload.arguments.execute.inArguments = [restBody]
 
     // let journey builder know the activity has changes
