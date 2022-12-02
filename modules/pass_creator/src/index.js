@@ -803,15 +803,19 @@ function onInitActivity(payload) {
     return jbApp
 }
 
-function onDoneButtonClick() {              
-    jbApp.payload["metaData"].isConfigured = true; 
-    jbApp.payload.arguments.execute.body = [{"message": jbApp.message}]
+function onDoneButtonClick() {    
+    // Construct Body of REST Call     
+    let restBody = {"message": jbApp.message}
 
-    //jbApp.payload.arguments.execute.outArguments = [{"message": jbApp.message}]
+    // Place body in outgoing call
+    jbApp.payload.arguments.execute.body = [restBody]
+    jbApp.payload.arguments.execute.outArguments = [restBody]
+
     // let journey builder know the activity has changes
     connection.trigger('setActivityDirtyState', true);
 
     // tell JB we're ready to go
+    jbApp.payload["metaData"].isConfigured = true; 
     connection.trigger('updateActivity', jbApp.payload);
 }
 
