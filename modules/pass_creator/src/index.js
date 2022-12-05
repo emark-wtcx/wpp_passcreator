@@ -810,10 +810,11 @@ function onDoneButtonClick() {
     let restBody = {"message": jbApp.message}
 
     // Place body in outgoing call
+    jbApp.payload.name = 'WPP Passcreator'
     jbApp.payload.arguments.message = jbApp.message
     jbApp.payload.arguments.execute.inArguments = [restBody]
-    jbApp.payload.arguments.execute.outArguments = [restBody]
-    jbApp.payload.arguments.execute.body = [restBody]
+    
+    
 
     // let journey builder know the activity has changes
     connection.trigger('setActivityDirtyState', true);
