@@ -31,7 +31,7 @@ module.exports = function configJSON(req) {
         // Fill in the host with the host that this is running on.
         // It must run under HTTPS
         url: `https://eol3vy07fc9qzyh.m.pipedream.net`,
-        verb: "POST",
+        //verb: "POST",
         method: "POST",
         format: "json",
         useJwt: false,

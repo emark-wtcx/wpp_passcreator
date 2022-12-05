@@ -800,7 +800,7 @@ function onInitActivity(payload) {
     // a discountCode message from the drop down list. the discountCode back arg
     // will be set once the journey executes the activity
     jbApp.load(connection)
-    jbApp.payload = payload
+    jbApp.payload = activity
     window.jbApp = jbApp
     return jbApp
 }
@@ -810,7 +810,6 @@ function onDoneButtonClick() {
     let restBody = {"message": jbApp.message}
 
     // Place body in outgoing call
-    jbApp.payload.arguments.body = [restBody]
     jbApp.payload.arguments.execute.inArguments = [restBody]
 
     // let journey builder know the activity has changes
