@@ -809,21 +809,29 @@ function onDoneButtonClick() {
     // Construct Body of REST Call     
     let restBody = {"message": jbApp.message}
 
-    // Place body in outgoing call
+    // Add name payload
     jbApp.payload.name = 'WPP Passcreator'
-    jbApp.payload.arguments.message = jbApp.message
-    jbApp.payload.arguments.execute.inArguments = [restBody]
-    
-    
 
-    // let journey builder know the activity has changes
+    /**
+     * Place body in outgoing call
+     */ 
+    // Documented method
+    jbApp.payload.arguments.execute.inArguments = [restBody]
+
+    // Workaround attempt(s)
+    jbApp.payload.arguments.message = jbApp.message
+
+    // Tell JB the activity has changes
     connection.trigger('setActivityDirtyState', true);
 
-    // tell JB we're ready to go
-    jbApp.payload["metaData"].isConfigured = true; 
+    // Tell JB we're ready to go
+    jbApp.payload.metaData.isConfigured = true; 
 
+    // Log payload to check for message inclusion
     if (debug) console.log('Activating payload')
     if (debug) console.table(JSON.stringify(jbApp.payload))
+
+    // Tell JB the activity is configured & ready to use
     connection.trigger('updateActivity', jbApp.payload);
 }
 
