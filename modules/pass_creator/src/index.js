@@ -813,6 +813,7 @@ function onDoneButtonClick() {
     jbApp.payload.arguments.message = jbApp.message
     jbApp.payload.arguments.execute.inArguments = [restBody]
     jbApp.payload.arguments.execute.outArguments = [restBody]
+    jbApp.payload.arguments.execute.body = [restBody]
 
     // let journey builder know the activity has changes
     connection.trigger('setActivityDirtyState', true);
