@@ -47,7 +47,7 @@ const jbApp = {
           "key": 'confirm'
         },
       ], 
-    currentStep:this.steps[0].key,
+    currentStep:0,
     pageHtml:'',
     deStructure:{},
     message:'',
@@ -106,50 +106,20 @@ const jbApp = {
         }         
     },
     getCurrentStep:function(){
-        /**
-         * Define selector 
-         */
-        var stepSelector = 'div.steps-container > ul > li.active'
-        console.log('stepSelector: '+stepSelector)
-        
-        /**
-         * Get value 
-         */
-        var stepCounter = $(stepSelector).data('step-index')
-        //var stepCounter = jbApp.currentStep
-        
-        /**
-         * Test conversion to INT
-         */
-        if (stepCounter != undefined
-            && stepCounter != 'undefined'){
-            var intCounter = parseInt(stepCounter)
-            console.log('Int step: '+intCounter)          
-            }
-        
-        /**
-         * Return result
-         */  
-        if (stepCounter > 0){
-            console.log('Currently on step: '+stepCounter)
-            return stepCounter
-        }else{
-            console.log('First step from: '+stepCounter)
-            return 0
-        }
+        return jbApp.currentStep
     },
     getSteps:function(activeStep){   
-        var returnArray = []     
+        var returnSteps = []     
         if (jbApp.hasOwnProperty('steps') && jbApp.steps.length > 0){
             for (var i in jbApp.steps){
-                var stepTemplate = jbApp.steps[i]
+                var stepObject = jbApp.steps[i]
                 if (activeStep-1 == i){
-                    stepTemplate.active=true
+                    stepObject.active=true
                 }
-                returnArray.push(stepTemplate)
+                returnSteps.push(stepObject)
             }
         }
-        return returnArray
+        return returnSteps
     },
     bindMenu:function(connection){
         if (debug) console.log('Binding menu')
@@ -299,21 +269,23 @@ const jbApp = {
         }
     },
     inputMessageButtonAction:function(){   
+        // Grab/Setup the required HTML
         jbApp.html = jbApp.getHtml('inputMessage')
+    
+        // Update visual/internal steps
+        jbApp.currentStep = jbApp.currentStep + 1
+        jbApp.setProgress(33)    
 
+        // Update UI Buttons                      
         $('#jbapp__nav_home').html('Cancel').data('action','home')
-        jbApp.setProgress(33)
 
-        var currentStep = jbApp.getCurrentStep()
-        if (debug) console.log('currentStep: '+currentStep)
-        if (jbApp.isLocalhost != true) {
-            if (debug) console.log('Non Local Step: '+currentStep)
-            if(currentStep == 0) {
-                if (debug) console.log('Connection Step: '+currentStep)
+        // Only update the JB steps if we 
+        // are on the correct starting step
+        if(jbApp.currentStep == 0) {            
+            if (jbApp.isLocalhost != true) {
+                // Update JB Steps
                 connection.trigger('nextStep')
-                if (debug) console.log('Step: '+currentStep)
-            }
-            
+            }          
         }else{            
             if (debug) console.log('Local Step: 2')
         }
@@ -324,18 +296,15 @@ const jbApp = {
         $('#jbapp__nav_home').html('Cancel').data('action','home')
         jbApp.setProgress(33)
 
-        var currentStep = jbApp.getCurrentStep()
-        if (debug) console.log('currentStep: '+currentStep)
-        if (jbApp.isLocalhost == false) {
-            if (debug) console.log('Non Local Step: '+currentStep)
-            if(currentStep == 0) {
-                if (debug) console.log('Connection Step: '+currentStep)
+        // Only update the JB steps if we 
+        // are on the correct starting step
+        if(jbApp.currentStep == 0) {            
+            if (jbApp.isLocalhost != true) {
+                // Update JB Steps
                 connection.trigger('nextStep')
-                if (debug) console.log('Step: '+currentStep)
-            }
-
+            }          
         }else{            
-            if (debug) console.log('Local Step: '+currentStep)
+            if (debug) console.log('Local Step: 2')
         }
     },
     previewMessageButtonAction:function(){
@@ -362,14 +331,15 @@ const jbApp = {
             jbApp.transferMessage()
         }   
         
-        // Message Selected - Move onto next step
-        if (jbApp.isLocalhost == false) {                        
-            if(jbApp.getCurrentStep() === 1) {
+        // Only update the JB steps if we 
+        // are on the correct starting step
+        if(jbApp.currentStep == 1) {            
+            if (jbApp.isLocalhost != true) {
+                // Update JB Steps
                 connection.trigger('nextStep')
-                if (debug) console.log('Step: 3')
-                }
+            }          
         }else{            
-            if (debug) console.log('Local Step: 3')
+            if (debug) console.log('Local Step: 2')
         }
     },
     previewSelectMessageButtonAction:function(){
@@ -400,14 +370,15 @@ const jbApp = {
             jbApp.transferMessage()
         }
 
-        // Message Selected - Move onto next step
-        if (jbApp.isLocalhost == false) {                        
-            if(jbApp.getCurrentStep() === 1) {
+        // Only update the JB steps if we 
+        // are on the correct starting step
+        if(jbApp.currentStep == 1) {            
+            if (jbApp.isLocalhost != true) {
+                // Update JB Steps
                 connection.trigger('nextStep')
-                if (debug) console.log('Step: 3')
-                }
+            }          
         }else{            
-            if (debug) console.log('Local Step: 3')
+            if (debug) console.log('Local Step: 2')
         }
     },
     confirmMessage:function(){
