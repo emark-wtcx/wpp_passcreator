@@ -134,33 +134,17 @@ module.exports = function passCreator(app, options) {
             }
         }
 
-        /**
-         * Generate a random discount code.
-         *
-         * Note: This function is for demonstration purposes only and is not designed
-         * to generate real random codes. The first digit is always A, B, C, D, or E.
-         *
-         * @returns {Object}
-         *
-         * Example Response Object
-         * {
-         *    "discount":"15",
-         *    "discountCode":"ADUXN-96454-15%"
-         * }
-         */
-        function generateRandomCode() {
-            let toReturn = String.fromCharCode(65+(Math.random() * 5));
-            for(let i = 0; i < 4; i++) {
-                toReturn += String.fromCharCode(65+(Math.random() * 25));
-            }
-            return toReturn + "-" + Math.round(Math.random() * 99999, 0);
-        }
+        /*
+        $.post( "ajax/test.html", function( data ) {
+            $( ".result" ).html( data );
+          });
+        */
 
         // example: https://developer.salesforce.com/docs/atlas.en-us.noversion.mc-app-development.meta/mc-app-development/example-rest-activity.htm
-        const discountInArgument = getInArgument('discount') || 'nothing';
+        const messageInArgument = getInArgument('message') || 'nothing';
         const responseObject = {
-            discount: discountInArgument,
-            discountCode: generateRandomCode() + `-${discountInArgument}%`
+            message: messageInArgument,
+            test:true
         };
 
         console.log('Response Object', JSON.stringify(responseObject));
