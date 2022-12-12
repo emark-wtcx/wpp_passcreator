@@ -82,7 +82,20 @@ module.exports = function configJSON(req) {
       arguments: {
         execute: {
           inArguments: [
-            {"message":""}
+            {
+              "message":{
+                "dataType": "text",
+                "isNullable": false,
+                "direction": "in"
+                }
+            },
+            {
+              "emailAddress": {
+                "dataType": "Email",
+                "isNullable": false,
+                "direction": "in"
+              }
+            }
           ],
           outArguments: []
         }
