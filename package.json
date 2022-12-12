@@ -12,6 +12,7 @@
     "deploy": "npm install --dev",
     "prebuild":"npm install --dev",
     "start": "node ./app.js",
+    "postbuild": "node ./app.js",
     "bump": "npm run bump:patch",
     "bump:major": "./node_modules/version-bump-prompt/bin/bump.js --major --all --tag",
     "bump:minor": "./node_modules/version-bump-prompt/bin/bump.js --minor --all --tag",
