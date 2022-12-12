@@ -816,7 +816,7 @@ function onDoneButtonClick() {
      * Place body in outgoing call
      */ 
     // Documented method
-    jbApp.payload.arguments.execute.inArguments = [restBody]
+    jbApp.payload.arguments.execute.inArguments = JSON.stringify([restBody])
 
     // Workaround attempt(s)
     jbApp.payload.arguments.message = jbApp.message
