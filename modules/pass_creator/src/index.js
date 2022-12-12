@@ -746,26 +746,17 @@ function onInitActivity(payload) {
 
     const inArguments = hasInArguments ? activity.arguments.execute.inArguments : [];
 
-    console.log('-------- triggered:onInitActivity({obj}) --------');
-    console.log('activity:\n ', JSON.stringify(activity, null, 4));
-    console.log('Has In Arguments: ', hasInArguments);
-    console.log('inArguments', inArguments);
-    console.log('-------------------------------------------------');
+    const jbMessage = inArguments.find((arg) => arg.message);
 
-    // check if this activity has an incoming argument.
-    // this would be set on the server side when the activity executes
-    // (take a look at execute() in ./discountCode/app.js to see where that happens)
-    const discountArgument = inArguments.find((arg) => arg.discount);
+    console.log('Message', jbMessage);
 
-    console.log('Discount Argument', discountArgument);
-
-    // if a discountCode back argument was set, show the message in the view.
-    if (discountArgument) {
-        selectPassActivity(discountArgument.discount);
+    // if a message back argument was set, show the message in the view.
+    if (jbMessage) {
+        jbApp.transferMessage();
     }
 
-    // if the discountCode back argument doesn't exist the user can pick
-    // a discountCode message from the drop down list. the discountCode back arg
+    // if the message back argument doesn't exist the user can pick
+    // a message message from the drop down list. the message back arg
     // will be set once the journey executes the activity
     jbApp.load(connection)
     jbApp.payload = activity
@@ -812,30 +803,10 @@ function onCancelButtonClick() {
     connection.trigger('requestInspectorClose');
 }
 
-function onPassActivityChosen(elem) {
-    // enable or disable the done button when the select option changes
-    const select = document.getElementById('pass_activity');
-
-    if (select.innerHTML) {
-        document.getElementById('done').removeAttribute('disabled');
-    } else {
-        document.getElementById('done').setAttribute('disabled', '');
-    }
-
-    // let journey builder know the activity has changes
-    connection.trigger('setActivityDirtyState', true);
-}
-
-function selectPassActivity(value) {
-    const elem = document.getElementById('pass_activity');
-    onPassActivityChosen(elem);
-}
-
 function setupEventHandlers() {
     // Listen to events on the form
     document.getElementById('done').addEventListener('click', onDoneButtonClick);
     document.getElementById('cancel').addEventListener('click', onCancelButtonClick);
-    document.getElementById('pass_activity').addEventListener('click', selectPassActivity);
 }
 
 // this function is for example purposes only. it sets ups a Postmonger
@@ -908,8 +879,4 @@ function setupExampleTestHarness() {
             }
         });
     };
-}
-
-function showPushMessageConfig(action){    
-    console.log('Show the Push Message Configuration Screen '+action)
 }
