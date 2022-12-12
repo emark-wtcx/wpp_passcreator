@@ -46,7 +46,8 @@ const jbApp = {
           "label": "Confirm",
           "key": 'confirm'
         },
-      ],  
+      ], 
+    currentStep:this.steps[0].key,
     pageHtml:'',
     deStructure:{},
     message:'',
@@ -114,12 +115,8 @@ const jbApp = {
         /**
          * Get value 
          */
-        var stepCounter = $(stepSelector).attr('data-step-index')
-        var stepCounter2 = $(stepSelector).prop('data-step-index')
-        var stepCounter3 = $(stepSelector).data('step-index')
-        console.log('Attr step: '+stepCounter)  
-        console.log('Prop step2: '+stepCounter2)  
-        console.log('Data step3: '+stepCounter3)  
+        var stepCounter = $(stepSelector).data('step-index')
+        //var stepCounter = jbApp.currentStep
         
         /**
          * Test conversion to INT
@@ -187,7 +184,7 @@ const jbApp = {
                         jbApp.processPageChange(refreshPage)
                         
                         // Accounce Click
-                        console.log('clicked showStep')
+                        console.log('clicked showStep:'+jbApp.currentStep)
                     });                
                     if (debug) console.log('Bound '+action) 
                 break
@@ -816,7 +813,7 @@ function onDoneButtonClick() {
      * Place body in outgoing call
      */ 
     // Documented method
-    jbApp.payload.arguments.execute.inArguments = [restBody]
+    jbApp.payload["arguments"].execute.inArguments = [restBody]
 
     // Workaround attempt(s)
     jbApp.payload.arguments.message = jbApp.message
@@ -825,7 +822,7 @@ function onDoneButtonClick() {
     connection.trigger('setActivityDirtyState', true);
 
     // Tell JB we're ready to go
-    jbApp.payload.metaData.isConfigured = true; 
+    jbApp.payload["metaData"].isConfigured = true; 
 
     // Log payload to check for message inclusion
     if (debug) console.log('Activating payload')
