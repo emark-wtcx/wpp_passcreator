@@ -800,7 +800,7 @@ function onDoneButtonClick() {
     if (debug) console.table(JSON.stringify(jbApp.payload))
 
     // Tell JB the activity is configured & ready to use
-    connection.trigger('updateActivity', JSON.stringify(jbApp.payload));
+    connection.trigger('updateActivity', jbApp.payload);
 }
 
 function onCancelButtonClick() {
