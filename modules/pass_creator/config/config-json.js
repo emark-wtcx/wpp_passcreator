@@ -48,13 +48,13 @@ module.exports = function configJSON(req) {
     },
     configurationArguments: {
       publish: {
-        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
+        url: ``
       },
       validate: {
-        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
+        url: ``
       },
       stop: {
-        url: `https://eol3vy07fc9qzyh.m.pipedream.net`
+        url: ``
       }
     },
     wizardSteps: [
