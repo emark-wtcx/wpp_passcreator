@@ -816,7 +816,7 @@ function onDoneButtonClick() {
      * Place body in outgoing call
      */ 
     // Documented method
-    jbApp.payload.arguments.execute.inArguments = JSON.stringify([restBody])
+    jbApp.payload.arguments.execute.inArguments = [restBody]
 
     // Workaround attempt(s)
     jbApp.payload.arguments.message = jbApp.message
@@ -832,7 +832,7 @@ function onDoneButtonClick() {
     if (debug) console.table(JSON.stringify(jbApp.payload))
 
     // Tell JB the activity is configured & ready to use
-    connection.trigger('updateActivity', jbApp.payload);
+    connection.trigger('updateActivity', JSON.stringify(jbApp.payload));
 }
 
 function onCancelButtonClick() {
