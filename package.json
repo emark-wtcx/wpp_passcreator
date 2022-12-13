@@ -9,7 +9,6 @@
     "dev": "concurrently \"npm start\" \"webpack --watch\"",
     "prebuild":"npm install --dev",
     "build": "set NODE_OPTIONS=--openssl-legacy-provider webpack --mode production",
-    "postbuild": "node ./app.js",
     "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider & webpack --mode development",
     "deploy": "npm install --dev",
     "start": "node ./app.js",
