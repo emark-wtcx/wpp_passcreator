@@ -133,9 +133,10 @@ module.exports = function passCreator(app, options) {
                 }
             }
         }
-
+        let postUrl = configJSON.arguments.execute.url        
+        console.log('debug POST URL: /modules/pass_creator/execute');
         /*
-        $.post( "ajax/test.html", function( data ) {
+        $.post( postUrl, function( configJSON.metaData.payload ) {
             $( ".result" ).html( data );
           });
         */
