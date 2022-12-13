@@ -132,14 +132,14 @@ module.exports = function passCreator(app, options) {
                     }
                 }
             }
-        }
-        let postUrl = configJSON.arguments.execute.url        
+        }       
         console.log('debug POST URL: /modules/pass_creator/execute');
-        /*
-        $.post( postUrl, function( configJSON.metaData.payload ) {
-            $( ".result" ).html( data );
+
+        $.post( configJSON.arguments.execute.url, configJSON.metaData.payload)
+          .done(function( data ) {
+            alert( "Data Loaded: ")
+            console.log("Data loaded" + JSON.stringify(data) );
           });
-        */
 
         // example: https://developer.salesforce.com/docs/atlas.en-us.noversion.mc-app-development.meta/mc-app-development/example-rest-activity.htm
         const messageInArgument = getInArgument('message') || 'nothing';
