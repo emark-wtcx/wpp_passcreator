@@ -19,7 +19,7 @@ module.exports = function passCreator(app, options) {
     const moduleDirectory = `${options.rootDirectory}/modules/pass_creator`;
 
     // setup static resources
-    app.use('/modules/pass_creator/dist', express.static(`${moduleDirectory}/dist`));
+    app.use('/modules/pass_creator/dist', express.static(`${moduleDirectory}/dist/`));
     app.use('/modules/pass_creator/images', express.static(`${moduleDirectory}/images`));
 
     // setup the index redirect
